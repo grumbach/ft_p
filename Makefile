@@ -6,7 +6,7 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/10 17:19:11 by agrumbac          #+#    #+#              #
-#    Updated: 2018/10/31 17:25:34 by agrumbac         ###   ########.fr        #
+#    Updated: 2018/10/31 20:26:15 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -Werror -fsanitize=address,undefined -g
 
-COMMON_SRC =
+COMMON_SRC = ft_p.c
 
 SERVER_SRC = server.c ${COMMON_SRC}
 

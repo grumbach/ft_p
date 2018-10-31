@@ -5,83 +5,65 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/10/31 17:04:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/10/31 17:07:46 by agrumbac         ###   ########.fr       */
+/*   Created: 2018/10/31 20:01:06 by agrumbac          #+#    #+#             */
+/*   Updated: 2018/10/31 20:25:45 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_p.h"
 
 /*
-    C socket server example
+**
 */
 
-#include<stdio.h>
-#include<string.h>    //strlen
-#include<sys/socket.h>
-#include<arpa/inet.h> //inet_addr
-#include<unistd.h>    //write
-
-int main(void)
+__NO_RETURN
+void			signal_handler(int sig)
 {
-    int socket_desc , client_sock , c , read_size;
-    struct sockaddr_in server , client;
-    char client_message[2000];
+	//TODO manage errors
+	server_cleanup();
+	exit(0);
+}
 
-    //Create socket
-    socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-    if (socket_desc == -1)
-    {
-        printf("Could not create socket");
-    }
-    puts("Socket created");
+__NO_RETURN
+static void		fatal(const char *error)
+{
+	exit(-1);
+}
 
-    //Prepare the sockaddr_in structure
-    server.sin_family = AF_INET;
-    server.sin_addr.s_addr = INADDR_ANY;
-    server.sin_port = htons( 8888 );
+__NO_RETURN
+static void		child_code()
+{
+	//TODO ft_p happens here
+}
 
-    //Bind
-    if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
-    {
-        //print the error message
-        perror("bind failed. Error");
-        return 1;
-    }
-    puts("bind done");
+__NO_RETURN
+static void		accept_loop()
+{
+	while (1)
+	{
+		accept(); //mostly blocks here
 
-    //Listen
-    listen(socket_desc , 3);
+		if (fd == -1)
+			fatal("accept failed");
+		else
+		{
+			pid = fork();
+			if (pid == 0) //if child
+				child_code();
 
-    //Accept and incoming connection
-    puts("Waiting for incoming connections...");
-    c = sizeof(struct sockaddr_in);
+			//father stays in the loop
+		}
+	}
+}
 
-    //accept connection from an incoming client
-    client_sock = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c);
-    if (client_sock < 0)
-    {
-        perror("accept failed");
-        return 1;
-    }
-    puts("Connection accepted");
+__NO_RETURN
+void			main(int ac, char **av)
+{
+	parse_args();
 
-    //Receive a message from client
-    while( (read_size = recv(client_sock , client_message , 2000 , 0)) > 0 )
-    {
-        //Send the message back to client
-        write(client_sock , client_message , strlen(client_message));
-    }
+	server_init();
 
-    if(read_size == 0)
-    {
-        puts("Client disconnected");
-        fflush(stdout);
-    }
-    else if(read_size == -1)
-    {
-        perror("recv failed");
-    }
+	signal(0 /* what is sig? */, &signal_handler);
 
-    return 0;
+	accept_loop();
 }
