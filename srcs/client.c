@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:03 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/02 22:44:41 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/02 23:05:11 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,14 @@ int			main(void/*int ac, char **av*/)
 
 	// client_code();
 
-	char buf[9];
-	read(sock, buf, 8);
-	ft_puts(buf);
+	while (1)
+	{
+		char buf[9];
+		if (recv(sock, buf, 8, 0) == 0)
+			break;
+		ft_puts(buf);
+	}
+	ft_puts("server disconnected...");
 
 	socket_cleanup(sock);
 

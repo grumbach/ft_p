@@ -6,14 +6,14 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/02 22:40:27 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/02 23:11:43 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_P_H
 # define FT_P_H
 
-# define FTP_MAX_USERS			42
+# define FTP_MAX_USERS			2
 
 # include "libft.h"
 # include <sys/socket.h>

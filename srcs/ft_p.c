@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:18:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/02 22:40:28 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/02 23:16:06 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,9 @@ int				socket_init(char *address, int port, enum e_mode is_server)
 	};
 
 	sock = socket(PF_INET , SOCK_STREAM , 0);
+
+	// if (setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int)) < 0)
+	// 	fatal("Failed to setsockopt(SO_REUSEADDR)");
 
 	if (sock == -1)
 		fatal("Failed to create socket");

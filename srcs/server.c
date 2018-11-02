@@ -6,31 +6,35 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:06 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/02 22:44:47 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/02 23:20:33 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_p.h"
-//
-// /*
-// ** ft_p code
-// */
-//
-// static void		child_code()
-// {
-// 	//TODO ft_p happens here
-// }
-//
-// /*
-// ** exceptions
-// */
-//
-// void			signal_handler(int sig)
-// {
-// 	//TODO manage errors
-// 	socket_cleanup();
-// 	exit(0);
-// }
+#include <signal.h>
+
+
+/*
+** ft_p code
+*/
+
+static void		no_return_child_code(int client_sock)
+{
+	//TODO ft_p happens here
+	send(client_sock , "CHILD server says hello\n", 24, 0);
+}
+
+/*
+** exceptions
+*/
+
+void			signal_handler(__unused int sig)
+{
+	//TODO manage errors
+	// socket_cleanup(??);
+	ft_puts("Exiting...");
+	exit(0);
+}
 
 /*
 ** main code
@@ -41,6 +45,7 @@ static void		accept_loop(int sock)
 	struct sockaddr_in		client;
 	int						client_sock;
 	socklen_t				socklen;
+	pid_t					pid;
 
 	while (1)
 	{
@@ -51,13 +56,10 @@ static void		accept_loop(int sock)
 		if (client_sock == -1)
 			fatal("Error while attempting to accept connection");
 
-		write(client_sock, "SUCESS\n", 8);
-
-		// pid = fork();
-		// if (pid == 0) //if child
-		// 	child_code();
-
-		//father stays in the loop
+		send(client_sock , "SUCESS\n", 8, 0);
+		pid = fork();
+		if (pid == 0)
+			no_return_child_code(client_sock);
 	}
 }
 
@@ -69,7 +71,7 @@ int				main(void/*int ac, char **av*/)
 
 	sock = socket_init(NULL, 4242, SERVER);
 
-	// signal(0 /* what is sig? */, &signal_handler);
+	signal(SIGINT, &signal_handler);
 
 	accept_loop(sock);
 }
