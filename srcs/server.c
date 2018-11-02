@@ -6,64 +6,70 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:06 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/10/31 20:25:45 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/02 22:44:47 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_p.h"
+//
+// /*
+// ** ft_p code
+// */
+//
+// static void		child_code()
+// {
+// 	//TODO ft_p happens here
+// }
+//
+// /*
+// ** exceptions
+// */
+//
+// void			signal_handler(int sig)
+// {
+// 	//TODO manage errors
+// 	socket_cleanup();
+// 	exit(0);
+// }
 
 /*
-**
+** main code
 */
 
-__NO_RETURN
-void			signal_handler(int sig)
+static void		accept_loop(int sock)
 {
-	//TODO manage errors
-	server_cleanup();
-	exit(0);
-}
+	struct sockaddr_in		client;
+	int						client_sock;
+	socklen_t				socklen;
 
-__NO_RETURN
-static void		fatal(const char *error)
-{
-	exit(-1);
-}
-
-__NO_RETURN
-static void		child_code()
-{
-	//TODO ft_p happens here
-}
-
-__NO_RETURN
-static void		accept_loop()
-{
 	while (1)
 	{
-		accept(); //mostly blocks here
+		socklen = sizeof(struct sockaddr_in);
+		client_sock = accept(sock, (struct sockaddr *)&client, \
+			(socklen_t*)&socklen);
 
-		if (fd == -1)
-			fatal("accept failed");
-		else
-		{
-			pid = fork();
-			if (pid == 0) //if child
-				child_code();
+		if (client_sock == -1)
+			fatal("Error while attempting to accept connection");
 
-			//father stays in the loop
-		}
+		write(client_sock, "SUCESS\n", 8);
+
+		// pid = fork();
+		// if (pid == 0) //if child
+		// 	child_code();
+
+		//father stays in the loop
 	}
 }
 
-__NO_RETURN
-void			main(int ac, char **av)
+int				main(void/*int ac, char **av*/)
 {
-	parse_args();
+	int			sock;
 
-	server_init();
+	// parse_args();
 
-	signal(0 /* what is sig? */, &signal_handler);
+	sock = socket_init(NULL, 4242, SERVER);
 
-	accept_loop();
+	// signal(0 /* what is sig? */, &signal_handler);
+
+	accept_loop(sock);
 }

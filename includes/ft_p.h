@@ -6,21 +6,28 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/10/31 20:26:35 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/02 22:40:27 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_P_H
 # define FT_P_H
 
+# define FTP_MAX_USERS			42
+
+# include "libft.h"
 # include <sys/socket.h>
 # include <arpa/inet.h>
 
-# include "libft.h"
+enum			e_mode
+{
+	CLIENT,
+	SERVER
+};
 
-# define __NO_RETURN		__attribute__((__noreturn__))
+int				socket_init(char *address, int port, enum e_mode is_server);
+void			socket_cleanup(int sock);
 
-void		server_init();
-void		server_cleanup();
+void			fatal(const char *error);
 
 #endif
