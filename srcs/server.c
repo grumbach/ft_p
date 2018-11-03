@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:06 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/02 23:20:33 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/03 20:16:06 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,12 @@
 static void		no_return_child_code(int client_sock)
 {
 	//TODO ft_p happens here
-	send(client_sock , "CHILD server says hello\n", 24, 0);
+
+	while (1)
+	{
+		
+	}
+	exit(0);
 }
 
 /*
@@ -31,7 +36,7 @@ static void		no_return_child_code(int client_sock)
 void			signal_handler(__unused int sig)
 {
 	//TODO manage errors
-	// socket_cleanup(??);
+	socket_cleanup();
 	ft_puts("Exiting...");
 	exit(0);
 }
@@ -56,7 +61,6 @@ static void		accept_loop(int sock)
 		if (client_sock == -1)
 			fatal("Error while attempting to accept connection");
 
-		send(client_sock , "SUCESS\n", 8, 0);
 		pid = fork();
 		if (pid == 0)
 			no_return_child_code(client_sock);
