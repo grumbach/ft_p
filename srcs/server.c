@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:06 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/03 20:16:06 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/16 18:41:26 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,35 @@
 ** ft_p code
 */
 
+static const	execute_command =
+{
+	CMD_BAD	 -> {send(CMD_BAD, error.len); send(error)}
+	CMD_LS	 -> {fork() execve(ls) dup2() while(read(buf) send(size) send(buf))}
+	CMD_MKDIR-> {mkdir(), send(OK)}
+	CMD_CD	 -> {chdir() send(OK)}
+	CMD_GET	 -> {open() fstat() mmap() send(file.size), send(file) munmap()}
+	CMD_PUT	 -> {open(O_CREATE) write(file) send(OK)}
+	CMD_PWD	 -> {cwd(), send(pwd)}
+}
+
+static int	receive_command(char *client_input)
+{
+	int ret = recv(client_input, FTP_CLIENT_MAX_INPUT);
+	if (ret == -1)
+		manage_error();
+
+	return (ret);
+}
+
 static void		no_return_child_code(int client_sock)
 {
-	//TODO ft_p happens here
+	char			client_input[FTP_CLIENT_MAX_INPUT];
 
-	while (1)
+	while (receive_command(&client_input))
 	{
-		
+		execute_command[cmd](client_input);
 	}
+	close(client_sock);
 	exit(0);
 }
 

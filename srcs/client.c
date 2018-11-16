@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:03 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/03 23:49:53 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/16 18:39:55 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static const char	*cmd_str =
 {
 	[CMD_BAD] = "invalid command",
 	[CMD_LS] = "ls ",//how about plain ls?
+	[CMD_MKDIR] = "mkdir ",
 	[CMD_CD] = "cd ",
 	[CMD_GET] = "get ",
 	[CMD_PUT] = "put ",
@@ -45,6 +46,7 @@ static enum e_cmd	determine_command(const char *command)
 {
 	return (CMD_BAD
 	|	CMD_LS * !ft_strncmp(cmd_str[CMD_LS], command, 3)
+	|	CMD_MKDIR * !ft_strncmp(cmd_str[CMD_MKDIR], command, 6)
 	|	CMD_CD * !ft_strncmp(cmd_str[CMD_CD], command, 3)
 	|	CMD_GET * !ft_strncmp(cmd_str[CMD_GET], command, 4)
 	|	CMD_PUT * !ft_strncmp(cmd_str[CMD_PUT], command, 4)
@@ -69,38 +71,16 @@ static inline bool	cmd_put()
 	return (true);
 }
 
-static bool			smuggle_payload(int sock, const char *client_input)
+static const execute_command =
 {
-	t_ftp_header	header;
-	void			*body;
-
-	header.cmd = determine_command(client_input);
-	if (header.cmd == CMD_QUIT)
-		return (false);
-
-	if (header.cmd == CMD_LS || header.cmd == CMD_CD
-	|| header.cmd == CMD_GET || header.cmd == CMD_PUT)
-	{
-		const char *filename = client_input + ft_strlen(cmd_str[header.cmd]);
-
-		if (header.cmd == CMD_PUT)
-		{
-			if (cmd_put() == false)
-				header = {CMD_BAD, 0};
-		}
-		else
-		{
-			body = filename;
-			header.body_size = ft_strlen(body);
-		}
-	}
-	else
-		header.body_size = 0;
-
-	send(sock, header, sizeof(header), 0);
-	if (header.body_size != 0)
-		send(sock, body, header.body_size, 0);
-	return (true);
+	CMD_BAD	 -> {send nothing; disp error}
+	CMD_LS	 -> {       send(args.len);  send(args)}
+	CMD_MKDIR-> {       send(args.len);  send(args)}
+	CMD_CD	 -> {       send(args.len);  send(args)}
+	CMD_GET	 -> {       send(args.len);  send(args)}
+	CMD_PUT	 -> {mmap() send(file.size); send(file) munmap()}
+	CMD_PWD	 -> {       send() len==0}
+	CMD_QUIT -> {say_bye()}
 }
 
 /*
@@ -109,14 +89,16 @@ static bool			smuggle_payload(int sock, const char *client_input)
 
 void			client_shell(int sock)
 {
-	char		client_input[FTP_CLIENT_MAX_INPUT];
+	char			client_input[FTP_CLIENT_MAX_INPUT];
+	enum e_cmd		cmd;
 
 	while (1)
 	{
-		if (prompt(&client_input) == 0 || \
-			smuggle_payload(sock, &client_input) == false || \
-			receive_answer() == false)
-			break;
+		prompt(&client_input);
+		cmd = determine_command(client_input);
+		execute_command[cmd](client_input);
+		if (cmd == CMD_QUIT)
+			break ;
 	}
 	return ;
 }

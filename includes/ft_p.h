@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/03 23:12:33 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/16 16:50:51 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,21 @@ enum			e_cmd
 {
 	CMD_BAD,    /* for any invalid commands */
 	CMD_LS,     /* list in the current server’s directory */
+	CMD_MKDIR,  /* make a directory */
 	CMD_CD,     /* change the current server’s directory */
 	CMD_GET,    /* download the file file from the server to the client */
 	CMD_PUT,    /* upload the file file from the client to the server */
 	CMD_PWD,    /* display the path of the current server’s directory */
 	CMD_QUIT,   /* cuts the connection + exit the program */
-	CMD_LAST
+	CMD_LAST    /* number of CMDs */
+};
+
+enum			e_answer
+{
+	ASW_BAD,    /* for any invalid commands */
+	ASW_OK,     /* success answer */
+	ASW_MORE,   /* if there is more data to read */
+	ASW_LAST    /* number of ASWs */
 };
 
 /*
@@ -48,8 +57,8 @@ enum			e_cmd
 
 typedef struct	s_ftp_header
 {
-	enum e_cmd	cmd;
-	size_t		body_size;
+	uint64_t	body_size;
+	uint32_t	type;
 }				t_ftp_header;
 
 /*
