@@ -28,3 +28,23 @@ void			errors(const char *error, const char *comment)
 	ft_perr(comment);
 	ft_perr("\n");
 }
+
+bool			parse_args(int ac, char **av, char **address, uint16_t *port)
+{
+	// client case
+	if (address && ac == 3)
+	{
+		*address = av[1];
+		*port = (uint16_t)ft_atoi(av[2]);
+		return (true);
+	}
+	//server case
+	else if (address == NULL && ac == 2)
+	{
+		*port = (uint16_t)ft_atoi(av[1]);
+		return (true);
+	}
+	// error case
+	ft_printf("usage : %s %s<port>\n", av[0], address ? "<address>" : "");
+	return (false);
+}

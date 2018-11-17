@@ -103,13 +103,16 @@ void			client_shell(int sock)
 	return ;
 }
 
-int				main(void/*int ac, char **av*/)
+int				main(int ac, char **av)
 {
-	int			sock;
+	int				sock;
+	char			*address;
+	uint16_t		port;
 
-	// parse_args();
+	if (parse_args(ac, av, &address, &port) == false)
+		return (EXIT_FAILURE);
 
-	sock = socket_init("127.0.0.1", 4242, CLIENT);
+	sock = socket_init(address, port, CLIENT);
 
 	client_shell(sock);
 

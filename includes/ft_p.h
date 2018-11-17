@@ -65,6 +65,8 @@ typedef struct	s_ftp_header
 ** -----------------------------------------------------------------------------
 */
 
+bool			parse_args(int ac, char **av, char **address, uint16_t *port);
+
 int				socket_init(char *address, int port, enum e_mode is_server);
 void			socket_cleanup(void);
 

@@ -88,13 +88,15 @@ static void		accept_loop(int sock)
 	}
 }
 
-int				main(void/*int ac, char **av*/)
+int				main(int ac, char **av)
 {
 	int			sock;
+	uint16_t	port
 
-	// parse_args();
+	if (parse_args(ac, av, NULL, &port) == false)
+		return (EXIT_FAILURE);
 
-	sock = socket_init(NULL, 4242, SERVER);
+	sock = socket_init(NULL, port, SERVER);
 
 	signal(SIGINT, &signal_handler);
 
