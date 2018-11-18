@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:03 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 19:54:55 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/18 20:15:43 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	prompt(char *client_input)
 {
 	int		read_chars;
 
-	ft_printf("[ft_p]$> ");
+	ft_printf("\e[34m[\e[32mft_p\e[34m]$> \e[0m");
 
 	read_chars = read(0, client_input, FTP_CLIENT_MAX_INPUT - 1);
 	if (read_chars == -1)
@@ -60,6 +60,7 @@ void			client_shell(int sock)
 		if (cmd == CMD_QUIT)
 			break ;
 	}
+	ft_printf("\e[32mExiting...\n\e[0m");
 	return ;
 }
 

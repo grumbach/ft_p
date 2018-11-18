@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:12:17 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 19:48:09 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/18 20:17:11 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ bool			cmd_mkdir(int sock, char *client_input);
 bool			cmd_cd(int sock, char *client_input);
 bool			cmd_get(int sock, char *client_input);
 bool			cmd_quit(int sock, char *client_input);
-
 bool			cmd_put(int sock, char *client_input);
 bool			cmd_pwd(int sock, char *client_input);
 

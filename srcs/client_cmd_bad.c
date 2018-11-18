@@ -6,14 +6,15 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:46:40 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 19:54:39 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/18 20:18:19 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-bool			cmd_bad(int sock, char *client_input)
+bool			cmd_bad(__unused int sock, char *client_input)
 {
-	ft_printf("client cmd_bad!");
+	if (client_input[0] != '\n')
+		ft_printf("\e[33m[WARNING] \e[0munrecognized command\n");
+	return (true);
 }
-//{send nothing; disp error}

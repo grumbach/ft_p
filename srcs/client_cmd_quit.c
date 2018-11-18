@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:47:24 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 19:48:26 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/18 20:15:34 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,5 @@
 
 bool			cmd_quit(int sock, char *client_input)
 {
-	ft_printf("Goodbye!");
+	return (false);
 }
