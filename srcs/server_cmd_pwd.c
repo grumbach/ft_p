@@ -12,20 +12,16 @@
 
 #include "server.h"
 
-bool			cmd_pwd(int sock, uint64_t body_size)
+bool			cmd_pwd(int sock, __unused uint64_t body_size)
 {
-	// char			buf[FTP_BODY_BUFFER];
-	// t_ftp_header	request;
-	//
-	//
-	// if (!getcwd(buf, FTP_BODY_BUFFER))
-	// 	return(manage_error("pwd too long"));
-	//
-	// request.body_size = ft_strlen(filename) + 1 + g_filesize;
-	// request.type = ASW_OK;
-	// send(sock, &request, sizeof(request), 0);
-	//
-	// send(sock, buf, FTP_BODY_BUFFER, 0);
-	//
-	// return (false);
+	char			buf[MAXPATHLEN + 1];
+	t_ftp_header	request;
+
+	if (!getcwd(buf, MAXPATHLEN))
+		return(cmd_bad(sock, 1));
+	request.body_size = MAXPATHLEN;
+	request.type = ASW_OK;
+	send(sock, &(request.type), sizeof(request.type), 0);
+	send(sock, buf, MAXPATHLEN, 0);
+	return (false);
 }
