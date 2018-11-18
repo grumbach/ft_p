@@ -12,19 +12,23 @@
 
 #include "client.h"
 
-bool			cmd_pwd(int sock, char *client_input)
+bool			cmd_pwd(int sock, __unused char *client_input)
 {
-	// t_ftp_header	request;
-	// char			buf[FTP_BODY_BUFFER];
-	//
-	// (void)client_input;
-	// request.body_size = 4;
-	// request.type = CMD_PUT;
-	//
-	// //send header
-	// send(sock, &request, sizeof(request), 0);
-	// recv(sock, buf, FTP_BODY_BUFFER, 0);
-	// ft_printf("%s\n", buf);
-	//
-	// return (true);
+	t_ftp_header	request;
+	char			buf[MAXPATHLEN + 1];
+
+	request.body_size = 0;
+	request.type = CMD_PUT;
+
+	//send header
+	send(sock, &request, sizeof(request), 0);
+	recv(sock, &request, sizeof(request), 0);
+	if (request.type == CMD_BAD)
+		ft_printf("error for pwd"); // checker la fonction error_server
+	else
+	{
+		recv(sock, buf, MAXPATHLEN, 0);
+		ft_printf("%s\n", buf);
+	}
+	return (true);
 }

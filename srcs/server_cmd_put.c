@@ -12,8 +12,8 @@
 
 #include "server.h"
 
-static ssize_t	read_from_recv(int sock, char *buf)
-{
+// static ssize_t	read_from_recv(__unused int sock, __unused char *buf)
+// {
 	// ssize_t ret;
 	//
 	// ret = recv(sock, buf, FTP_BODY_BUFFER, 0);
@@ -22,9 +22,9 @@ static ssize_t	read_from_recv(int sock, char *buf)
 	// else if (ret == 0)
 	// 	return (0); //connection closed
 	// return(ret);
-}
+// }
 
-bool			cmd_put(int sock, uint64_t body_size)
+bool			cmd_put(__unused int sock, __unused uint64_t body_size)
 {
 	// char		buf[FTP_BODY_BUFFER];
 	// int			ret;
@@ -43,5 +43,5 @@ bool			cmd_put(int sock, uint64_t body_size)
 	// 	read_data += ret;
 	// }
 	// close(fd); // TODO protect this (this is a joke)
-	// return (false);
+	return (false);
 }

@@ -46,7 +46,7 @@
 
 //TODO protect all send and recv monkey business
 
-bool			cmd_put(int sock, char *client_input)
+bool			cmd_put(__unused int sock, __unused char *client_input)
 {
 	// t_ftp_header	request;
 	// char			*filename;
@@ -70,5 +70,5 @@ bool			cmd_put(int sock, char *client_input)
 	// send(sock, g_file_content, g_filesize, 0);
 	//
 	// free_file();
-	// return (true);
+	return (true);
 }

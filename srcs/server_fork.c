@@ -40,7 +40,7 @@ static bool	receive_command(int sock, t_ftp_header *request)
 	}
 	else if (ret != sizeof(*request))
 	{
-		ft_printf("[ERROR] receiving on socket {%d}\n", sock);
+		ft_printf("[ERROR] receiving on socket {%d} ret: %d request: %d\n", sock, ret, sizeof(*request));
 		return (false);
 	}
 	return (true);
@@ -60,8 +60,9 @@ void		no_return_child_code(int sock)
 			request.body_size = ERR_BAD_CMD_CODE;
 		}
 
-		ft_printf("[LOG] begin connection on socket {%d}\n", sock);
-		execute_command[request.type](sock, request.body_size);
+		ft_printf("[LOG] begin connection on socket {%d} CMD {%d} %d\n", sock, request.type, CMD_BAD);
+		execute_command[request.type + 1](sock, request.body_size);
+
 	}
 
 	ft_printf("[LOG] closing socket {%d}\n", sock);
