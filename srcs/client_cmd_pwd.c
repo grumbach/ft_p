@@ -21,8 +21,8 @@ bool			cmd_pwd(int sock, __unused char *client_input)
 	request.type = CMD_PUT;
 
 	//send header
-	send(sock, &(request.type), sizeof(request.type), 0);
-	recv(sock, &(request.type), sizeof(request.type), 0);
+	send(sock, &request, sizeof(request), 0);
+	recv(sock, &request, sizeof(request), 0);
 	if (request.type == CMD_BAD)
 		ft_printf("error for pwd"); // checker la fonction error_server
 	else

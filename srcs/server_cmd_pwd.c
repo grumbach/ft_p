@@ -21,7 +21,7 @@ bool			cmd_pwd(int sock, __unused uint64_t body_size)
 		return(cmd_bad(sock, 1));
 	request.body_size = MAXPATHLEN;
 	request.type = ASW_OK;
-	send(sock, &(request.type), sizeof(request.type), 0);
+	send(sock, &request, sizeof(request), 0);
 	send(sock, buf, MAXPATHLEN, 0);
 	return (false);
 }

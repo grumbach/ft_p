@@ -31,16 +31,16 @@ static bool	receive_command(int sock, t_ftp_header *request)
 {
 	int		ret;
 
-	ret = recv(sock, &(request->type), sizeof(request->type), 0);
+	ret = recv(sock, request, sizeof(*request), 0);
 
 	if (ret == 0)
 	{
 		ft_printf("[LOG] connection closed on socket {%d}\n", sock);
 		return (false);
 	}
-	else if (ret != sizeof(request->type))
+	else if (ret != sizeof(*request))
 	{
-		ft_printf("[ERROR] receiving on socket {%d} ret: %d request: %d\n", sock, ret, sizeof(request->type));
+		ft_printf("[ERROR] receiving on socket {%d} ret: %d request: %d\n", sock, ret, sizeof(*request));
 		return (false);
 	}
 	return (true);
