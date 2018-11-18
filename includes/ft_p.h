@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/16 16:50:51 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/19 00:03:13 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,13 @@
 
 # define FTP_MAX_QUEUE			5
 # define FTP_CLIENT_MAX_INPUT	2048
+# define ERROR_BUFFER			1024
 
 # include "libft.h"
 # include <sys/socket.h>
 # include <arpa/inet.h>
 # include <stdbool.h>
-#include <sys/param.h>
+# include <sys/param.h>
 
 enum			e_mode
 {
@@ -72,5 +73,6 @@ int				socket_init(char *address, int port, enum e_mode is_server);
 void			socket_cleanup(void);
 
 void			fatal(const char *error);
+void			warn(const char *warning);
 
 #endif

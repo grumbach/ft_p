@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 20:47:48 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/19 00:06:39 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,9 +60,9 @@ void		no_return_child_code(int sock)
 			request.body_size = ERR_BAD_CMD_CODE;
 		}
 
-		ft_printf("[LOG] begin connection on socket {%d} CMD {%d} %d\n", sock, request.type, CMD_BAD);
-		execute_command[request.type + 1](sock, request.body_size);
-
+		ft_printf("[LOG] {%d} recieved command %d\n", sock, request.type);
+		if (!execute_command[request.type](sock, request.body_size))
+			break ;
 	}
 
 	ft_printf("[LOG] closing socket {%d}\n", sock);

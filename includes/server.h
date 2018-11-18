@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:10:58 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 20:52:39 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/18 23:55:06 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,11 @@ void			no_return_child_code(int client_sock);
 enum			e_server_errors
 {
 	ERR_BAD_CMD_CODE,
-	ERR_CWD
+	ERR_CWD,
+	ERR_PATHLEN_OVERFLOW,
+	ERR_CHDIR,
+	ERR_PERMISSION,
+	ERR_LAST
 };
 
 /*
