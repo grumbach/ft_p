@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 19:54:17 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/18 20:47:48 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ void		no_return_child_code(int sock)
 	while (receive_command(sock, &request))
 	{
 		if (request.type >= CMD_QUIT)
+		{
 			request.type = CMD_BAD;
+			request.body_size = ERR_BAD_CMD_CODE;
+		}
 
 		ft_printf("[LOG] begin connection on socket {%d}\n", sock);
 		execute_command[request.type](sock, request.body_size);
