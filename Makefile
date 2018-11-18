@@ -6,7 +6,7 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/10 17:19:11 by agrumbac          #+#    #+#              #
-#    Updated: 2018/11/18 19:21:02 by agrumbac         ###   ########.fr        #
+#    Updated: 2018/11/18 19:49:35 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,13 +18,28 @@ CLIENT_NAME = client
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address,undefined -g
+CFLAGS = -Wall -Wextra -fsanitize=address,undefined -g
 
 COMMON_SRC = socket.c errors.c
 
-SERVER_SRC = ${COMMON_SRC} server.c server_fork.c
+SERVER_SRC = ${COMMON_SRC} server.c server_fork.c \
+server_cmd_pwd.c \
+server_cmd_put.c \
+server_cmd_bad.c \
+server_cmd_ls.c \
+server_cmd_mkdir.c \
+server_cmd_cd.c \
+server_cmd_get.c
 
-CLIENT_SRC = ${COMMON_SRC} client.c client_parse.c
+CLIENT_SRC = ${COMMON_SRC} client.c client_parse.c \
+client_cmd_pwd.c \
+client_cmd_put.c \
+client_cmd_bad.c \
+client_cmd_ls.c \
+client_cmd_mkdir.c \
+client_cmd_cd.c \
+client_cmd_get.c \
+client_cmd_quit.c
 
 SRCDIR = srcs
 

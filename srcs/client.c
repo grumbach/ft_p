@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:03 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 19:21:40 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/18 19:54:55 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,14 @@
 
 static bool	(*execute_command[CMD_LAST])(int, char*) =
 {
-	// CMD_BAD	 -> {send nothing; disp error}
-	// CMD_LS	 -> {       send(args.len);  send(args)}
-	// CMD_MKDIR-> {       send(args.len);  send(args)}
-	// CMD_CD	 -> {       send(args.len);  send(args)}
-	// CMD_GET	 -> {       send(args.len);  send(args)}
-	// CMD_PUT	 -> {mmap() send(file.size); send(file) munmap()}
-	// CMD_PWD	 -> {       send() len==0}
-	// CMD_QUIT -> {say_bye()}
+	[CMD_BAD] = &cmd_bad,
+	[CMD_LS] = &cmd_ls,
+	[CMD_MKDIR] = &cmd_mkdir,
+	[CMD_CD] = &cmd_cd,
+	[CMD_GET] = &cmd_get,
+	[CMD_PUT] = &cmd_put,
+	[CMD_PWD] = &cmd_pwd,
+	[CMD_QUIT] = &cmd_quit
 };
 
 static int	prompt(char *client_input)
@@ -53,7 +53,8 @@ void			client_shell(int sock)
 
 	while (1)
 	{
-		prompt(client_input);
+		if (prompt(client_input) == 0)
+			break ;
 		cmd = determine_command(client_input);
 		execute_command[cmd](sock, client_input);
 		if (cmd == CMD_QUIT)

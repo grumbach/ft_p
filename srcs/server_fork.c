@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 18:53:53 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/18 19:54:17 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
 
 static bool	(*execute_command[CMD_LAST])(int, uint64_t) =
 {
-	// CMD_BAD	 -> {send(CMD_BAD, error.len); send(error)}
-	// CMD_LS	 -> {fork() execve(ls) dup2() while(read(buf) send(size) send(buf))}
-	// CMD_MKDIR-> {mkdir(), send(OK)}
-	// CMD_CD	 -> {chdir() send(OK)}
-	// CMD_GET	 -> {open() fstat() mmap() send(file.size), send(file) munmap()}
-	// CMD_PUT	 -> {open(O_CREATE) write(file) send(OK)}
-	// CMD_PWD	 -> {cwd(), send(pwd)}
+	[CMD_BAD] = &cmd_bad,
+	[CMD_LS] = &cmd_ls,
+	[CMD_MKDIR] = &cmd_mkdir,
+	[CMD_CD] = &cmd_cd,
+	[CMD_GET] = &cmd_get,
+	[CMD_PUT] = &cmd_put,
+	[CMD_PWD] = &cmd_pwd
 };
 
 static bool	receive_command(int sock, t_ftp_header *request)
