@@ -55,10 +55,13 @@ int		main(int argc, char **argv)
 	{
 		while (i < TEST_SIZE)
 		{
-			path = simplify_path(strdup(test_str[i]));
-			printf("path %i : [%s] old_path [%s]\n", i, path, test_str[i]);
+			if (test_str[i])
+			{
+				path = simplify_path(strdup(test_str[i]));
+				printf("path %i : [%s] old_path [%s]\n", i, path, test_str[i]);
+				free(path);
+			}
 			i++;
-			free(path);
 		}
 	}
 	else if (argc == 2)
@@ -67,5 +70,6 @@ int		main(int argc, char **argv)
 		printf("path : [%s]\n", path);
 		free(path);
 	}
+	getchar();
 	return (0);
 }

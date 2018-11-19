@@ -71,5 +71,6 @@ int				socket_init(char *address, int port, enum e_mode is_server);
 void			socket_cleanup(void);
 
 void			fatal(const char *error);
+char			*simplify_path(char *path);
 
 #endif

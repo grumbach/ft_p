@@ -37,14 +37,26 @@ char		*ft_strndup(const char *str, size_t len)
 char		*get_real_path(char *path)
 {
 	char		*new_path;
-	char		pwd_server[MAXPATHLEN] = "/";
+	char		pwd_path[MAXPATHLEN];
+	char		*pwd_server;
+	int			root_path_size;
 
 	if (path[0] == '/')
 		new_path = path;
 	else
 	{
-		new_path = ft_strjoin(pwd_server, path);
-		free(path);
+		root_path_size = ft_strlen(g_root_path);
+		if (getcwd(pwd_path, MAXPATHLEN) == NULL
+			|| ft_strncmp(g_root_path, pwd_path, root_path_size))
+			return (NULL);
+		pwd_server = &pwd_path[root_path_size];
+		if (pwd_server[0])
+		{
+			new_path = ft_strjoin(pwd_server, path);
+			free(path);
+		}
+		else
+			new_path = path;
 	}
 	return (new_path);
 }
@@ -53,7 +65,7 @@ void		*array_remove_elem(t_array *array, size_t elem_index)
 {
 	void		*elem;
 
-	if (elem_index > array->size)
+	if (elem_index >= array->size)
 		return (NULL);
 	elem = array->ptr[elem_index];
 	while (elem_index + 1 < array->size)
@@ -158,7 +170,10 @@ void		*ft_strsplit_to_array(const char *str, char spliter)
 	if ((array = ft_memalloc(sizeof(t_array))) == NULL)
 		return (NULL);
 	if ((array->ptr = ft_memalloc(count * sizeof(char *))) == NULL)
+	{
+		free(array);
 		return (NULL);
+	}
 	array->size = count;
 	array->real_size = count;
 	add_elems(str, spliter, array->ptr);
@@ -179,12 +194,10 @@ void		ft_array_del(t_array *array)
 	free(array);
 }
 
-char		*ft_concat_and_delete_array(t_array *array, char *concat_str)
+static size_t	ft_concat_array_find_len(t_array *array, char *concat_str)
 {
 	size_t		i;
 	size_t		len;
-	size_t		max_len;
-	char		*str;
 
 	i = 0;
 	len = 0;
@@ -195,9 +208,15 @@ char		*ft_concat_and_delete_array(t_array *array, char *concat_str)
 			len += ft_strlen(array->ptr[i]);
 		i++;
 	}
-	max_len = len;
-	if ((str = ft_memalloc(len + 1)) == NULL)
-		return (NULL);
+	return (len);
+}
+
+static char		*ft_concat_array_fill_str(t_array *array,
+	char *concat_str, size_t max_len, char *str)
+{
+	size_t		i;
+	size_t		len;
+
 	i = 0;
 	len = 0;
 	while (i < array->size)
@@ -211,6 +230,26 @@ char		*ft_concat_and_delete_array(t_array *array, char *concat_str)
 		}
 		i++;
 	}
+	return (str);
+}
+
+static char		*ft_concat_array(t_array *array, char *concat_str)
+{
+	size_t		len;
+	char		*str;
+
+	len = ft_concat_array_find_len(array, concat_str);
+	if ((str = ft_memalloc(len + 1)) == NULL)
+		return (NULL);
+	ft_concat_array_fill_str(array, concat_str, len, str);
+	return (str);
+}
+
+char		*ft_concat_and_delete_array(t_array *array, char *concat_str)
+{
+	char		*str;
+
+	str = ft_concat_array(array, concat_str);
 	ft_array_del(array);
 	return (str);
 }
