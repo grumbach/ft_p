@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/03 17:38:53 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/03 23:34:59 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/18 23:57:31 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,15 @@
 
 void			fatal(const char *error)
 {
-	//OMG 3 SYSCALLS!
-	ft_perr("Fatal: ");
+	ft_perr("[FATAL ERROR] ");
 	ft_perr(error);
 	ft_perr("\n");
 	exit(-1);
 }
 
-void			errors(const char *error, const char *comment)
+void			warn(const char *warning)
 {
-	ft_perr("Error: ");
-	ft_perr(error);
-	ft_perr(comment);
-	ft_perr("\n");
+	ft_printf("\e[33m[WARNING] \e[0m%s\n", warning);
 }
 
 bool			parse_args(int ac, char **av, char **address, uint16_t *port)
@@ -45,6 +41,6 @@ bool			parse_args(int ac, char **av, char **address, uint16_t *port)
 		return (true);
 	}
 	// error case
-	ft_printf("usage : %s %s<port>\n", av[0], address ? "<address>" : "");
+	ft_printf("usage : %s %s<port>\n", av[0], address ? "<address> " : "");
 	return (false);
 }
