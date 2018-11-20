@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:08 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/19 00:06:28 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 15:13:34 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,10 @@ bool			cmd_cd(int sock, uint64_t body_size)
 		return(cmd_bad(sock, ERR_CHDIR));
 
 	*/
+	// NB THIS IS TMP
+	return (cmd_bad(sock, ERR_PERMISSION));
+	// NB THIS IS TMP
+
 
 	answer.type = ASW_OK;
 	answer.body_size = 0;

@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/19 00:06:39 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 15:09:05 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,5 +67,5 @@ void		no_return_child_code(int sock)
 
 	ft_printf("[LOG] closing socket {%d}\n", sock);
 	close(sock);
-	exit(0);
+	exit(EXIT_SUCCESS);
 }

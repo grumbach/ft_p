@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:06 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 18:47:08 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 15:09:13 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void			signal_handler(__unused int sig)
 	//TODO manage errors
 	socket_cleanup();
 	ft_puts("\n[LOG] Exiting...");
-	exit(0);
+	exit(EXIT_SUCCESS);
 }
 
 /*
