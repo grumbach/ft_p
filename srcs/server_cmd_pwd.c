@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 18:45:53 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 19:49:22 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 23:26:53 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,16 @@
 
 bool			cmd_pwd(int sock, __unused uint64_t body_size)
 {
-	char			buf[MAXPATHLEN + 1];
-	t_ftp_header	request;
+	char			path[MAXPATHLEN];
+	size_t			path_len;
 
-	if (!getcwd(buf, MAXPATHLEN))
-		return(cmd_bad(sock, 1));
-	request.body_size = MAXPATHLEN;
-	request.type = ASW_OK;
-	send(sock, &request, sizeof(request), 0);
-	send(sock, buf, MAXPATHLEN, 0);
-	return (false);
+	if (getcwd(path, MAXPATHLEN) == NULL)
+		return(cmd_bad(sock, ERR_CWD));
+	path_len = ft_strlen(path) + 1;
+
+	send_answer(sock, ASW_OK, path_len);
+
+	send(sock, path, path_len, 0);
+
+	return (true);
 }

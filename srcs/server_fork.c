@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 19:20:48 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 23:26:39 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static bool	(*execute_command[CMD_LAST])(int, uint64_t) =
 
 static bool	receive_command(int sock, t_ftp_header *request)
 {
-	int		ret;
+	ssize_t		ret;
 
 	ret = recv(sock, request, sizeof(*request), 0);
 
