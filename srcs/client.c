@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:03 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 15:09:19 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 19:54:37 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,12 @@ static int	prompt(char *client_input)
 	ft_printf("\e[34m[\e[32mft_p\e[34m]$> \e[0m");
 
 	read_chars = read(0, client_input, FTP_CLIENT_MAX_INPUT - 1);
-	if (read_chars == -1)
+	if (read_chars < 0)
 		fatal("Failed to read on stdin");
-	client_input[read_chars] = '\0';
+	if (read_chars == 0)
+		return (0);
 
+	client_input[read_chars - 1] = '\0'; //remove '\n'
 	return (read_chars);
 }
 

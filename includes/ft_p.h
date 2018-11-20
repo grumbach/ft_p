@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 18:55:04 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 23:09:36 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@
 # include <sys/mman.h>
 # include <stdbool.h>
 # include <fcntl.h>
+
+# define FTP_LOG				"\033[36m[LOG] \033[0m"
+# define FTP_WARN				"\033[33m[WARNING] \033[0m"
+# define FTP_ERR				"\033[31m[ERROR] \033[0m"
+# define FTP_FATAL				"\033[31;5m[FATAL ERROR] \033[0m"
 
 enum			e_mode
 {

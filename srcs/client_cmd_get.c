@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:46:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 18:56:42 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 23:10:05 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static bool		recieve_file(int sock, const char *filename, size_t body_size)
 	int			fd;
 	ssize_t		ret;
 
-	fd = open(filename, O_CREAT);
+	fd = open(filename, O_CREAT | O_WRONLY);
 	if (fd < 0)
 	{
 		warn("failed to open file for writing");
@@ -45,16 +45,16 @@ static bool		recieve_file(int sock, const char *filename, size_t body_size)
 	return (true);
 }
 
-static char		*get_filename_from(char *path)
+static char		*get_filename_from(char *client_input)
 {
 	char		*filename;
 
-	//last slash in path
-	filename = ft_strlaststr(path, "/");
-	//if not path
+	//last slash in client_input
+	filename = ft_strlaststr(client_input, "/");
+	//if not client_input
 	if (filename == NULL)
 	{
-		filename = ft_strstr(path, "get");
+		filename = ft_strstr(client_input, "get");
 		if (filename == NULL)
 			return (NULL);
 		filename += 3; // skip "get"
