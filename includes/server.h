@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:10:58 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 23:55:06 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 15:58:16 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ enum			e_server_errors
 	ERR_PATHLEN_OVERFLOW,
 	ERR_CHDIR,
 	ERR_PERMISSION,
+	ERR_GET_FILE,
+	ERR_INVALID_FILENAME,
 	ERR_LAST
 };
 

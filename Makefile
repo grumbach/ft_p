@@ -6,7 +6,7 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/10 17:19:11 by agrumbac          #+#    #+#              #
-#    Updated: 2018/11/18 19:49:35 by agrumbac         ###   ########.fr        #
+#    Updated: 2018/11/20 18:37:51 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,7 +20,7 @@ CC = gcc
 
 CFLAGS = -Wall -Wextra -fsanitize=address,undefined -g
 
-COMMON_SRC = socket.c errors.c
+COMMON_SRC = socket.c errors.c socket_io.c file_io.c
 
 SERVER_SRC = ${COMMON_SRC} server.c server_fork.c \
 server_cmd_pwd.c \

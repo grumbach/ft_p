@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:08 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 15:13:34 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 18:46:22 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 bool			cmd_cd(int sock, uint64_t body_size)
 {
 	char			buf[MAXPATHLEN];
-	t_ftp_header	answer;
 	int				ret;
 
 	if (body_size > MAXPATHLEN)
@@ -30,6 +29,9 @@ bool			cmd_cd(int sock, uint64_t body_size)
 	/*
 
 	// TODO uncomment when gnebie is done with simplify_path
+
+	if (ft_strstr("cd") == NULL)
+		return (cmd_bad(sock, ERR_BAD_CMD_CODE));
 
 	char *path = ft_strstr("cd") + 2; //find cd and skip it
 
@@ -48,10 +50,7 @@ bool			cmd_cd(int sock, uint64_t body_size)
 	return (cmd_bad(sock, ERR_PERMISSION));
 	// NB THIS IS TMP
 
+	send_answer(sock, ASW_OK, 0);
 
-	answer.type = ASW_OK;
-	answer.body_size = 0;
-
-	send(sock, &answer, sizeof(answer), 0);
 	return (true);
 }

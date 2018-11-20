@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:44:48 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 15:12:55 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 15:58:05 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ static const char *g_server_errors[] =
 	[ERR_CWD] = "cwd failed",
 	[ERR_PATHLEN_OVERFLOW] = "MAXPATHLEN exeeded",
 	[ERR_CHDIR] = "chdir failed",
-	[ERR_PERMISSION] = "permission denied"
+	[ERR_PERMISSION] = "permission denied",
+	[ERR_GET_FILE] = "failed to get file",
+	[ERR_INVALID_FILENAME] = "invalid filename"
 };
 
 bool			cmd_bad(int sock, uint64_t body_size)

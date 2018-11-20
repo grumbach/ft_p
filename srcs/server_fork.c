@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 15:09:05 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 16:20:46 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static bool	receive_command(int sock, t_ftp_header *request)
 	}
 	else if (ret != sizeof(*request))
 	{
-		ft_printf("[ERROR] receiving on socket {%d} ret: %d request: %d\n", sock, ret, sizeof(*request));
+		ft_printf("[ERROR] receiving on socket {%d}\n", sock);
 		return (false);
 	}
 	return (true);
