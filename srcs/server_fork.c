@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/19 00:06:39 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 23:26:39 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,18 @@ static bool	(*execute_command[CMD_LAST])(int, uint64_t) =
 
 static bool	receive_command(int sock, t_ftp_header *request)
 {
-	int		ret;
+	ssize_t		ret;
 
 	ret = recv(sock, request, sizeof(*request), 0);
 
 	if (ret == 0)
 	{
-		ft_printf("[LOG] connection closed on socket {%d}\n", sock);
+		ft_printf(FTP_LOG "\t\t{%d}\tconnection closed on socket\n", sock);
 		return (false);
 	}
 	else if (ret != sizeof(*request))
 	{
-		ft_printf("[ERROR] receiving on socket {%d} ret: %d request: %d\n", sock, ret, sizeof(*request));
+		ft_printf(FTP_WARN "\t{%d}\tbad request from socket\n", sock);
 		return (false);
 	}
 	return (true);
@@ -50,7 +50,7 @@ void		no_return_child_code(int sock)
 {
 	t_ftp_header	request;
 
-	ft_printf("[LOG] begin connection on socket {%d}\n", sock);
+	ft_printf(FTP_LOG "\t\t{%d}\tbegin connection on socket\n", sock);
 
 	while (receive_command(sock, &request))
 	{
@@ -60,12 +60,12 @@ void		no_return_child_code(int sock)
 			request.body_size = ERR_BAD_CMD_CODE;
 		}
 
-		ft_printf("[LOG] {%d} recieved command %d\n", sock, request.type);
+		ft_printf(FTP_LOG "\t\t{%d}\trecieved command %d\n", sock, request.type);
 		if (!execute_command[request.type](sock, request.body_size))
 			break ;
 	}
 
-	ft_printf("[LOG] closing socket {%d}\n", sock);
+	ft_printf(FTP_LOG "\t\t{%d}\tclosing socket\n", sock);
 	close(sock);
-	exit(0);
+	exit(EXIT_SUCCESS);
 }

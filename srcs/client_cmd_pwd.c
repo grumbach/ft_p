@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 18:45:55 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 19:49:17 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 23:26:51 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,29 @@
 
 bool			cmd_pwd(int sock, __unused char *client_input)
 {
-	t_ftp_header	request;
-	char			buf[MAXPATHLEN + 1];
+	char			path[MAXPATHLEN];
+	t_ftp_header	answer;
+	ssize_t			ret;
 
-	request.body_size = 0;
-	request.type = CMD_PUT;
+	send_request(sock, CMD_PWD, 0);
 
-	//send header
-	send(sock, &request, sizeof(request), 0);
-	recv(sock, &request, sizeof(request), 0);
-	if (request.type == CMD_BAD)
-		ft_printf("error for pwd"); // checker la fonction error_server
-	else
+	if (recieve_answer(sock, &answer) == false)
+		return (false);
+
+	if (answer.type != ASW_OK)
+		return (true);
+
+	ret = recv(sock, path, answer.body_size, 0);
+	if (ret == 0)
+		return (false);
+	if (ret == -1)
 	{
-		recv(sock, buf, MAXPATHLEN, 0);
-		ft_printf("%s\n", buf);
+		warn("failed to recieve path from server");
+		return (true);
 	}
+
+	path[ret] = '\0';
+	ft_puts(path);
+
 	return (true);
 }

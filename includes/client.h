@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:12:17 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 23:06:11 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 18:39:34 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@
 # include "ft_p.h"
 
 enum e_cmd		determine_command(const char *command);
-
-bool			recieve_error(int sock, size_t message_len);
 
 /*
 ** Client commands

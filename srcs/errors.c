@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/03 17:38:53 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 23:57:31 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 19:14:59 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,15 @@
 
 void			fatal(const char *error)
 {
-	ft_perr("[FATAL ERROR] ");
+	ft_perr(FTP_FATAL);
 	ft_perr(error);
 	ft_perr("\n");
-	exit(-1);
+	exit(EXIT_FAILURE);
 }
 
 void			warn(const char *warning)
 {
-	ft_printf("\e[33m[WARNING] \e[0m%s\n", warning);
+	ft_printf("%s%s\n", FTP_WARN, warning);
 }
 
 bool			parse_args(int ac, char **av, char **address, uint16_t *port)

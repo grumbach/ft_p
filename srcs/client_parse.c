@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:20:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 20:16:19 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 19:24:36 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 static const char	*cmd_str[] =
 {
 	[CMD_BAD] = "invalid command",
-	[CMD_LS] = "ls",//how about plain ls?
-	[CMD_MKDIR] = "mkdir ",
-	[CMD_CD] = "cd ",
-	[CMD_GET] = "get ",
-	[CMD_PUT] = "put ",
+	[CMD_LS] = "ls",
+	[CMD_MKDIR] = "mkdir",
+	[CMD_CD] = "cd",
+	[CMD_GET] = "get",
+	[CMD_PUT] = "put",
 	[CMD_PWD] = "pwd",
 	[CMD_QUIT] = "quit"
 };

@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/19 00:03:13 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/20 23:09:36 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,13 +15,20 @@
 
 # define FTP_MAX_QUEUE			5
 # define FTP_CLIENT_MAX_INPUT	2048
-# define ERROR_BUFFER			1024
+# define FTP_RECV_BUFFER		1024
 
 # include "libft.h"
-# include <sys/socket.h>
 # include <arpa/inet.h>
-# include <stdbool.h>
+# include <sys/socket.h>
 # include <sys/param.h>
+# include <sys/mman.h>
+# include <stdbool.h>
+# include <fcntl.h>
+
+# define FTP_LOG				"\033[36m[LOG] \033[0m"
+# define FTP_WARN				"\033[33m[WARNING] \033[0m"
+# define FTP_ERR				"\033[31m[ERROR] \033[0m"
+# define FTP_FATAL				"\033[31;5m[FATAL ERROR] \033[0m"
 
 enum			e_mode
 {
@@ -71,6 +78,15 @@ bool			parse_args(int ac, char **av, char **address, uint16_t *port);
 
 int				socket_init(char *address, int port, enum e_mode is_server);
 void			socket_cleanup(void);
+
+void			send_request(int sock, const int type, const size_t body_size);
+void			send_answer(int sock, const int type, const size_t body_size);
+bool			recieve_error(int sock, size_t message_len);
+bool			recieve_answer(int sock, t_ftp_header *answer);
+
+void			*read_file(const char *filename, size_t *file_size);
+void			free_file(void *file, size_t file_size);
+bool			filename_invalid(const char *filename);
 
 void			fatal(const char *error);
 char			*simplify_path(char *path);

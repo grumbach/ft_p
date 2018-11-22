@@ -42,7 +42,7 @@ char		*get_real_path(char *path)
 	int			root_path_size;
 
 	if (path[0] == '/')
-		new_path = path;
+		new_path = ft_strdup(path);
 	else
 	{
 		root_path_size = ft_strlen(g_root_path);
@@ -51,12 +51,9 @@ char		*get_real_path(char *path)
 			return (NULL);
 		pwd_server = &pwd_path[root_path_size];
 		if (pwd_server[0])
-		{
 			new_path = ft_strjoin(pwd_server, path);
-			free(path);
-		}
 		else
-			new_path = path;
+			new_path =  ft_strdup(path);
 	}
 	return (new_path);
 }
