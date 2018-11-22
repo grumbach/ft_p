@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 15:29:31 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 18:54:52 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/22 17:13:06 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,20 +46,4 @@ void		*read_file(const char *filename, size_t *file_size)
 void		free_file(void *file, size_t file_size)
 {
 	munmap(file, file_size);
-}
-
-bool		filename_invalid(const char *filename)
-{
-	size_t		len;
-
-	len = ft_strlen(filename);
-	if (len == 0)
-		return (true);
-	while (len)
-	{
-		len--;
-		if (!ft_isprint(filename[len]))
-			return (true);
-	}
-	return (false);
 }

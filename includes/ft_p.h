@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 23:09:36 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/22 17:16:46 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,8 @@ bool			recieve_answer(int sock, t_ftp_header *answer);
 
 void			*read_file(const char *filename, size_t *file_size);
 void			free_file(void *file, size_t file_size);
+
+char			*get_path_from(const char *buf, const char *cmd);
 bool			filename_invalid(const char *filename);
 
 void			fatal(const char *error);
