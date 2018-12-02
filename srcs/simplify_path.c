@@ -36,19 +36,21 @@ char		*ft_strndup(const char *str, size_t len)
 
 char		*get_real_path(char *path)
 {
-	char		*new_path;
-	char		pwd_path[MAXPATHLEN];
-	char		*pwd_server;
-	int			root_path_size;
+	char				*new_path;
+	char				pwd_path[MAXPATHLEN];
+	char				*pwd_server;
+	int					root_path_size;
+	const char *		const_global_real_path;
 
+	const_global_real_path = g_root_path;
 	if (path[0] == '/')
 		new_path = ft_strdup(path);
 	else
 	{
-		root_path_size = ft_strlen(g_root_path);
+		root_path_size = ft_strlen(const_global_real_path);
 		if (getcwd(pwd_path, MAXPATHLEN) == NULL
-			|| ft_strncmp(g_root_path, pwd_path, root_path_size))
-			return (NULL);
+			|| ft_strncmp(const_global_real_path, pwd_path, root_path_size))
+			return (ft_strdup("/"));
 		pwd_server = &pwd_path[root_path_size];
 		if (pwd_server[0])
 			new_path = ft_strjoin(pwd_server, path);
@@ -163,6 +165,8 @@ void		*ft_strsplit_to_array(const char *str, char spliter)
 	size_t		count;
 	t_array		*array;
 
+	if (str == NULL)
+		return (NULL);
 	count = count_array_elems(str, spliter);
 	if ((array = ft_memalloc(sizeof(t_array))) == NULL)
 		return (NULL);

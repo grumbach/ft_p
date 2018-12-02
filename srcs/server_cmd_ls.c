@@ -98,7 +98,7 @@ char		**get_argv_cmd(char *input)
 		if (ft_str_as_slash(argv[i]) == true)
 		{
 			simple_path = simplify_path(argv[i]);
-			ft_printf("simple path : ", simple_path);
+			free(argv[i]);
 			if (simple_path == NULL)
 			{
 				ft_del_tab(argv);
@@ -194,39 +194,29 @@ bool			cmd_ls(int sock, uint64_t body_size)
 	char			buf[MAXPATHLEN + 1];
 	pid_t			pid_son;
 	bool			ret;
-	char			*path;
 	char			**argv_cmd;
 	int				pipe_fds[2];
 
-	int i = 0;
-	printf("phase %i \n", i++); // 0
 	if (body_size > MAXPATHLEN)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	printf("phase %i \n", i++); // 1
 	if (cmd_recv(sock, body_size, buf) == false)
 		return (false); // pourquoi juste false
 
-	printf("phase %i %s\n", i++, buf); // 2
 	if (pipe(pipe_fds) == -1)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	printf("phase %i \n", i++); // 3
 	if ((argv_cmd = get_argv_cmd(buf)) == NULL)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	printf("phase %i \n", i++); // 4
 	if ((pid_son = fork_and_launch_ls(argv_cmd, pipe_fds)) == -1)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	printf("phase %i \n", i++); // 5
 	if (wait_son(pid_son))
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	printf("phase %i \n", i++); // 6
 	ret = recup_send_ls(sock, pipe_fds);
 
-	// ret = true;
 	return (ret);
 }
 //{fork() execve(ls) dup2() while(read(buf) send(size) send(buf))}
