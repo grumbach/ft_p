@@ -60,6 +60,8 @@ bool		recieve_answer(int sock, t_ftp_header *answer)
 		return (false);
 	if (ret == -1)
 	{
+		answer->type = ASW_BAD;
+		answer->body_size = 0;
 		warn("failed to recieve answer from server");//NB from server?
 		return (true);
 	}

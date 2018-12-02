@@ -76,7 +76,7 @@ char				**ft_strsplit(char *str, char c)
 			++k;
 		if (k == 0 || (tabl[j] = ft_strsub(str, (unsigned int)(i), k)) == NULL)
 			break ;
-		tabl[j++][k + 1] = 0;
+		tabl[j++][k] = 0;
 		i = i + k;
 	}
 	tabl[j] = NULL;
@@ -98,6 +98,7 @@ char		**get_argv_cmd(char *input)
 		if (ft_str_as_slash(argv[i]) == true)
 		{
 			simple_path = simplify_path(argv[i]);
+			ft_printf("simple path : ", simple_path);
 			if (simple_path == NULL)
 			{
 				ft_del_tab(argv);
@@ -105,6 +106,7 @@ char		**get_argv_cmd(char *input)
 			}
 			argv[i] = simple_path;
 		}
+		i++;
 	}
 	return (argv);
 }
@@ -116,7 +118,7 @@ bool		cmd_recv(int sock, uint64_t body_size, char buf[MAXPATHLEN])
 	if (body_size > 0) // else ?
 	{
 		ret = recv(sock, buf, body_size, 0);
-		if (ret != body_size)
+		if (ret != (int)body_size)
 			return (false);
 	}
 	return (true);
@@ -128,10 +130,11 @@ int		wait_son(pid_t pid_son)
 	int					son_return;
 	pid_t				pid_return;
 
+	son_return = 0;
 	pid_return = wait4(pid_son, &son_return, WUNTRACED, &usage);
 	if (pid_return == -1)
 		return (pid_return);
-	return (son_return);
+	return (0);
 }
 
 pid_t			fork_and_launch_ls(char **argv_cmd, int pipe_fds[2])
@@ -141,15 +144,13 @@ pid_t			fork_and_launch_ls(char **argv_cmd, int pipe_fds[2])
 	pid_son = -1;
 	if (ft_strcmp(argv_cmd[0], "ls") == 0)
 	{
-		close(STDIN_FILENO);
 		pid_son = fork();
-
 		if (!pid_son)
 		{
-			close(pipe_fds[1]);
-			dup2(pipe_fds[0], STDERR_FILENO);
-			dup2(pipe_fds[0], STDOUT_FILENO);
-			execve(argv_cmd[0], argv_cmd, NULL); // env ??
+			close(pipe_fds[0]);
+			dup2(pipe_fds[1], STDERR_FILENO);
+			dup2(pipe_fds[1], STDOUT_FILENO);
+			execve("/bin/ls", argv_cmd, NULL); // env ??
 			ft_putendl_fd("Error: execve error", 2);
 			exit(1);
 		}
@@ -158,7 +159,7 @@ pid_t			fork_and_launch_ls(char **argv_cmd, int pipe_fds[2])
 	return (pid_son);
 }
 
-void		send_full_answer(int sock, const int type, const size_t body_size, char *body)
+void		send_full_answer(int sock, const int type, const ssize_t body_size, char *body)
 {
 	send_answer(sock, type, body_size); // return value ?
 	if (send(sock, body, body_size, 0) != body_size)
@@ -168,15 +169,16 @@ void		send_full_answer(int sock, const int type, const size_t body_size, char *b
 
 bool				recup_send_ls(int sock, int pipe_fds[2])
 {
-	size_t		read_nbr;
+	ssize_t		read_nbr;
 	char		buff[MAXPATHLEN];
 	int			type;
 
 	type = ASW_MORE;
-	close(pipe_fds[0]);
-	while ((read_nbr = read(pipe_fds[1], buff, MAXPATHLEN)) == MAXPATHLEN)
-		send_full_answer(sock, type, read_nbr, buff);
 	close(pipe_fds[1]);
+	while ((read_nbr = read(pipe_fds[0], buff, MAXPATHLEN)) == MAXPATHLEN)
+		send_full_answer(sock, type, read_nbr, buff);
+
+	close(pipe_fds[0]);
 	type = ASW_OK;
 	if (read_nbr == -1)
 	{
@@ -191,32 +193,40 @@ bool			cmd_ls(int sock, uint64_t body_size)
 {
 	char			buf[MAXPATHLEN + 1];
 	pid_t			pid_son;
-	ssize_t			ret;
+	bool			ret;
 	char			*path;
 	char			**argv_cmd;
 	int				pipe_fds[2];
 
+	int i = 0;
+	printf("phase %i \n", i++); // 0
 	if (body_size > MAXPATHLEN)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
+	printf("phase %i \n", i++); // 1
 	if (cmd_recv(sock, body_size, buf) == false)
-		return (false);
+		return (false); // pourquoi juste false
 
+	printf("phase %i %s\n", i++, buf); // 2
 	if (pipe(pipe_fds) == -1)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
+	printf("phase %i \n", i++); // 3
 	if ((argv_cmd = get_argv_cmd(buf)) == NULL)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
+	printf("phase %i \n", i++); // 4
 	if ((pid_son = fork_and_launch_ls(argv_cmd, pipe_fds)) == -1)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
+	printf("phase %i \n", i++); // 5
 	if (wait_son(pid_son))
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
+	printf("phase %i \n", i++); // 6
 	ret = recup_send_ls(sock, pipe_fds);
 
-	ft_printf("cmd_ls");
+	// ret = true;
 	return (ret);
 }
 //{fork() execve(ls) dup2() while(read(buf) send(size) send(buf))}

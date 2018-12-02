@@ -14,7 +14,7 @@
 
 bool		recieve_body(int sock, t_ftp_header answer, char body[MAXPATHLEN + 1])
 {
-	size_t		ret;
+	int		ret;
 
 	if (answer.body_size == 0)
 		return (true);
@@ -35,20 +35,22 @@ bool		recieve_body(int sock, t_ftp_header answer, char body[MAXPATHLEN + 1])
 	return (true);
 }
 
-bool				recieve_cmd(int sock, t_ftp_header *answer)
+bool				recieve_cmd(int sock)
 {
-	char		body[MAXPATHLEN + 1];
+	char				body[MAXPATHLEN + 1];
+	t_ftp_header		answer;
 
 	while (1)
 	{
 		if (recieve_answer(sock, &answer) == false) // a changer <= boucle
 			return (false);
-		if (answer->type == ASW_OK || answer->type == ASW_MORE)
+		if (answer.type == ASW_OK || answer.type == ASW_MORE)
 		{
 			recieve_body(sock, answer, body);
-			printf("%*s", answer->body_size, body);
+			body[answer.body_size] = 0;
+			printf("%*s", (int)answer.body_size, body);
 		}
-		if (answer->type != ASW_MORE)
+		if (answer.type != ASW_MORE)
 			break ;
 	}
 	return (true);
@@ -56,7 +58,6 @@ bool				recieve_cmd(int sock, t_ftp_header *answer)
 
 bool			cmd_ls(int sock, char *client_input)
 {
-	t_ftp_header	answer;
 	size_t			body_size;
 
 	body_size = ft_strlen(client_input) + 1;
@@ -66,7 +67,7 @@ bool			cmd_ls(int sock, char *client_input)
 	send_request(sock, CMD_LS, body_size);
 
 	send(sock, client_input, body_size, 0);
-
+	recieve_cmd(sock);
 
 	return (true);
 }

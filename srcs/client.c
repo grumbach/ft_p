@@ -44,26 +44,6 @@ static int	prompt(char *client_input)
 	return (read_chars);
 }
 
-int		client_ls()
-{
-	CMD_LS	 -> {       send(args.len);  send(args)}
-
-	;
-}
-
-int		client_cd()
-{
-	CMD_CD	 -> {       send(args.len);  send(args)}
-
-	;
-}
-
-int		client_bad()
-{
-	CMD_BAD	 -> {send nothing; disp error}
-}
-
-
 /*
 ** Client main loop
 */

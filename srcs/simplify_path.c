@@ -96,7 +96,7 @@ void		array_delete_prev(t_array *array, size_t elem_index, void (*d)(void *))
 
 t_array			*remove_path_returns(t_array *path_tab)
 {
-	int			i;
+	size_t			i;
 
 	i = 0;
 	while (i < path_tab->size)

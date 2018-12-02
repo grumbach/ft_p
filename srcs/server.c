@@ -53,6 +53,8 @@ static void		accept_loop(int sock)
 	}
 }
 
+bool		set_root_path(void);
+
 int				main(int ac, char **av)
 {
 	int			sock;
@@ -61,6 +63,7 @@ int				main(int ac, char **av)
 	if (parse_args(ac, av, NULL, &port) == false)
 		return (EXIT_FAILURE);
 
+	set_root_path();
 	sock = socket_init(NULL, port, SERVER);
 
 	signal(SIGINT, &signal_handler);

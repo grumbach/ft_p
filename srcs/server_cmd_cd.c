@@ -6,32 +6,11 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:08 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 23:40:15 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/22 17:16:09 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
-
-static char		*get_path_from(const char *buf)
-{
-	char		*path;
-
-	path = ft_strstr(buf, "cd");
-	if (path == NULL)
-		return (NULL);
-
-	path = path + 2; //find cd and skip it
-	while (*path == ' ')//trim white spaces
-		path++;
-
-	// TODO uncomment when gnebie is done with simplify_path
-	/*
-	path = simplify_path(path);
-	if (path == NULL)
-		return(cmd_bad(sock, ERR_PERMISSION));
-	*/
-	return (path);
-}
 
 bool			cmd_cd(int sock, uint64_t body_size)
 {
@@ -49,7 +28,7 @@ bool			cmd_cd(int sock, uint64_t body_size)
 			return (false);
 	}
 
-	path = get_path_from(buf);
+	path = get_path_from(buf, "cd");
 	if (path == NULL)
 		return (cmd_bad(sock, ERR_PERMISSION));
 
