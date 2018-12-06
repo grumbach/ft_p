@@ -124,41 +124,6 @@ bool		cmd_recv(int sock, uint64_t body_size, char buf[MAXPATHLEN])
 	return (true);
 }
 
-int		wait_son(pid_t pid_son)
-{
-	struct rusage		usage;
-	int					son_return;
-	pid_t				pid_return;
-
-	son_return = 0;
-	pid_return = wait4(pid_son, &son_return, WUNTRACED, &usage);
-	if (pid_return == -1)
-		return (pid_return);
-	return (0);
-}
-
-pid_t			fork_and_launch_ls(char **argv_cmd, int pipe_fds[2])
-{
-	pid_t pid_son;
-
-	pid_son = -1;
-	if (ft_strcmp(argv_cmd[0], "ls") == 0)
-	{
-		pid_son = fork();
-		if (!pid_son)
-		{
-			close(pipe_fds[0]);
-			dup2(pipe_fds[1], STDERR_FILENO);
-			dup2(pipe_fds[1], STDOUT_FILENO);
-			execve("/bin/ls", argv_cmd, NULL); // env ??
-			ft_putendl_fd("Error: execve error", 2);
-			exit(1);
-		}
-	}
-	ft_del_tab(argv_cmd);
-	return (pid_son);
-}
-
 void		send_full_answer(int sock, const int type, const ssize_t body_size, char *body)
 {
 	send_answer(sock, type, body_size); // return value ?
@@ -189,13 +154,132 @@ bool				recup_send_ls(int sock, int pipe_fds[2])
 	return (true);
 }
 
+#define BUFSIZE 128
+
+typedef struct		s_smart_buff
+{
+	char	buff[BUFSIZE];
+	int		size;
+}					t_smart_buff;
+
+void		send_ok(int sock, t_smart_buff *smart_buff)
+{
+	send_full_answer(sock, ASW_OK, smart_buff->size, smart_buff->buff);
+}
+
+int			ft_nbr_len(long nbr)
+{
+	int			i;
+
+	i = 0;
+	while (nbr)
+	{
+		i++;
+		nbr /= 10;
+	}
+	return (i);
+}
+
+#include <dirent.h>
+
+void		feel_smart_buff_one_elem(const char elem, t_smart_buff *smart_buff, int sock)
+{
+	if (smart_buff->size >= BUFSIZE)
+	{
+		send_full_answer(sock, ASW_MORE, smart_buff->size, smart_buff->buff);
+		smart_buff->size = 0;
+	}
+	smart_buff->buff[smart_buff->size] = elem;
+	smart_buff->size++;
+}
+
+void		feel_smart_buff(const char *data, t_smart_buff *smart_buff, int sock)
+{
+	int			i;
+
+	i = 0;
+	while (data[i])
+	{
+		feel_smart_buff_one_elem(data[i], smart_buff, sock);
+		i++;
+	}
+	feel_smart_buff_one_elem('\n', smart_buff, sock);
+}
+
+bool		ft_ls_trait_file(const char *path, t_smart_buff *smart_buff, int sock)
+{
+	const char		*name;
+
+	name = ft_strrchr(path, '/');
+	if (!name)
+		name = path;
+	else
+		name++;
+	feel_smart_buff(name, smart_buff, sock);
+	return (0);
+}
+
+int			ft_ls_trait_dir(const char *path, t_smart_buff *smart_buff, int sock)
+{
+	void			*dir;
+	struct dirent	*dir_inside;
+
+	if ((dir = opendir(path)) == NULL)
+		return (0);
+	while ((dir_inside = readdir(dir)))
+	{
+		feel_smart_buff(dir_inside->d_name, smart_buff, sock);
+	}
+	closedir(dir);
+	return (0);
+}
+
+
+void		launch_ls_one_arg(t_smart_buff *smart_buff, const char *path, int sock)
+{
+	struct stat		buf;
+	// t_ls_max_info	max_infos;
+
+	if (lstat(path, &buf) == -1)
+		return ;
+	if (buf.st_mode & S_IFDIR)
+		ft_ls_trait_dir(path, smart_buff, sock);
+	else
+		ft_ls_trait_file(path, smart_buff, sock);
+	return ;
+}
+
+bool			launch_ls(char **argv_cmd, int sock)
+{
+	t_smart_buff	smart_buff;
+	int				i;
+
+	smart_buff.size = 0;
+	if (!argv_cmd || !argv_cmd[0]) // utile ??
+		return (false);
+	i = 1;
+	if (!argv_cmd[i])
+	{
+		char *name = simplify_path("/");
+		launch_ls_one_arg(&smart_buff, name, sock);
+		free(name);
+	}
+	else
+		while (argv_cmd[i])
+		{
+			launch_ls_one_arg(&smart_buff, argv_cmd[i], sock);
+			i++;
+		}
+	ft_del_tab(argv_cmd);
+	send_ok(sock, &smart_buff);
+	return (true);
+}
+
 bool			cmd_ls(int sock, uint64_t body_size)
 {
 	char			buf[MAXPATHLEN + 1];
-	pid_t			pid_son;
 	bool			ret;
 	char			**argv_cmd;
-	int				pipe_fds[2];
 
 	if (body_size > MAXPATHLEN)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
@@ -203,19 +287,11 @@ bool			cmd_ls(int sock, uint64_t body_size)
 	if (cmd_recv(sock, body_size, buf) == false)
 		return (false); // pourquoi juste false
 
-	if (pipe(pipe_fds) == -1)
-		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
-
 	if ((argv_cmd = get_argv_cmd(buf)) == NULL)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	if ((pid_son = fork_and_launch_ls(argv_cmd, pipe_fds)) == -1)
+	if ((ret = launch_ls(argv_cmd, sock)) == false)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
-
-	if (wait_son(pid_son))
-		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
-
-	ret = recup_send_ls(sock, pipe_fds);
 
 	return (ret);
 }
