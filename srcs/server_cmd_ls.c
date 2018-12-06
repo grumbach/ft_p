@@ -6,109 +6,33 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 19:54:15 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/06 06:22:37 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
+#include <sys/stat.h>
 
-bool		ft_str_as_slash(char *str)
+bool		ft_isspace(const char c)
 {
-	while(*str)
-	{
-		if (*str == '/')
-			return (true);
-		str++;
-	}
-	return (false);
+	return (c == ' ' || c == '\t');
 }
 
-void			ft_del_tab(char **tabl)
-{
-	int				i;
-
-	i = 0;
-	if (tabl)
-		while (tabl[i])
-		{
-			free(tabl[i]);
-			i++;
-		}
-	free(tabl);
-}
-
-static size_t		ft_st(char *s, char c)
-{
-	char	*i;
-	size_t	x;
-
-	i = s;
-	x = 0;
-	while (*i)
-	{
-		++x;
-		while (*i == c)
-			++i;
-		while (*i != c && *i)
-			++i;
-	}
-	return (x);
-}
-
-char				**ft_strsplit(char *str, char c)
-{
-	size_t			i;
-	char			**tabl;
-	size_t			j;
-	size_t			k;
-
-	if (!str || c == 0
-		|| !(tabl = ft_memalloc(sizeof(char *) * (ft_st(str, c) + 1))))
-		return (NULL);
-	j = 0;
-	i = 0;
-	while (str[i])
-	{
-		while (str[i] == c)
-			i++;
-		k = 0;
-		while (str[(i + k)] && str[(i + k)] != c)
-			++k;
-		if (k == 0 || (tabl[j] = ft_strsub(str, (unsigned int)(i), k)) == NULL)
-			break ;
-		tabl[j++][k] = 0;
-		i = i + k;
-	}
-	tabl[j] = NULL;
-	return (tabl);
-}
-
-// pwd_server = where am i
-
-char		**get_argv_cmd(char *input)
+char		*get_ls_path_arg(char *input)
 {
 	char		*simple_path;
-	char		**argv;
-	int			i;
 
-	argv = ft_strsplit(input, ' '); // super parser de la mort qui tue
-	i = 0;
-	while (argv[i])
-	{
-		if (ft_str_as_slash(argv[i]) == true)
-		{
-			simple_path = simplify_path(argv[i]);
-			free(argv[i]);
-			if (simple_path == NULL)
-			{
-				ft_del_tab(argv);
-				return (NULL);
-			}
-			argv[i] = simple_path;
-		}
-		i++;
-	}
-	return (argv);
+	// TODO remove this
+	if (ft_strlen(input) < 2) // strlen ls == 2
+		return (NULL);
+	input += 2;
+	// TODO remove this
+
+
+	while (ft_isspace(*input))
+		input++;
+	simple_path = simplify_path(input);
+	return (simple_path);
 }
 
 bool		cmd_recv(int sock, uint64_t body_size, char buf[MAXPATHLEN])
@@ -238,7 +162,6 @@ int			ft_ls_trait_dir(const char *path, t_smart_buff *smart_buff, int sock)
 void		launch_ls_one_arg(t_smart_buff *smart_buff, const char *path, int sock)
 {
 	struct stat		buf;
-	// t_ls_max_info	max_infos;
 
 	if (lstat(path, &buf) == -1)
 		return ;
@@ -249,28 +172,14 @@ void		launch_ls_one_arg(t_smart_buff *smart_buff, const char *path, int sock)
 	return ;
 }
 
-bool			launch_ls(char **argv_cmd, int sock)
+bool			launch_ls(char *ls_path, int sock)
 {
 	t_smart_buff	smart_buff;
-	int				i;
 
 	smart_buff.size = 0;
-	if (!argv_cmd || !argv_cmd[0]) // utile ??
-		return (false);
-	i = 1;
-	if (!argv_cmd[i])
-	{
-		char *name = simplify_path("/");
-		launch_ls_one_arg(&smart_buff, name, sock);
-		free(name);
-	}
-	else
-		while (argv_cmd[i])
-		{
-			launch_ls_one_arg(&smart_buff, argv_cmd[i], sock);
-			i++;
-		}
-	ft_del_tab(argv_cmd);
+	launch_ls_one_arg(&smart_buff, ls_path, sock);
+	free(ls_path);
+
 	send_ok(sock, &smart_buff);
 	return (true);
 }
@@ -278,8 +187,7 @@ bool			launch_ls(char **argv_cmd, int sock)
 bool			cmd_ls(int sock, uint64_t body_size)
 {
 	char			buf[MAXPATHLEN + 1];
-	bool			ret;
-	char			**argv_cmd;
+	char			*ls_path;
 
 	if (body_size > MAXPATHLEN)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
@@ -287,12 +195,11 @@ bool			cmd_ls(int sock, uint64_t body_size)
 	if (cmd_recv(sock, body_size, buf) == false)
 		return (false); // pourquoi juste false
 
-	if ((argv_cmd = get_argv_cmd(buf)) == NULL)
+	if ((ls_path = get_ls_path_arg(buf)) == NULL)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	if ((ret = launch_ls(argv_cmd, sock)) == false)
+	if (launch_ls(ls_path, sock) == false)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	return (ret);
+	return (true);
 }
-//{fork() execve(ls) dup2() while(read(buf) send(size) send(buf))}

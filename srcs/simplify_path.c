@@ -12,6 +12,16 @@ typedef struct		s_array
 	size_t	real_size;
 }					t_array;
 
+char *ft_strjoin(char *s1, char *s2)
+{
+	char *s3;
+
+	s3 = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	ft_strcpy(s3, s1);
+	ft_strcpy(s3 + ft_strlen(s1), s2);
+	return (s3);
+}
+
 size_t		ft_strnlen(const char *str, size_t len)
 {
 	size_t		size;

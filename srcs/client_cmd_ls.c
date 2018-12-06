@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:47:09 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/18 19:54:44 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/06 06:29:09 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ bool				recieve_cmd(int sock)
 		{
 			recieve_body(sock, answer, body);
 			body[answer.body_size] = 0;
-			printf("%*s", (int)answer.body_size, body);
+			ft_printf("%*s", (int)answer.body_size, body);
 		}
 		if (answer.type != ASW_MORE)
 			break ;
