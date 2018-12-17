@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_cmd_mkdir.c                                 :+:      :+:    :+:   */
+/*   server_cmd_get.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/18 19:43:01 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/22 17:17:35 by agrumbac         ###   ########.fr       */
+/*   Created: 2018/11/18 19:45:12 by agrumbac          #+#    #+#             */
+/*   Updated: 2018/12/17 02:17:20 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
-#include <sys/types.h>
-#include <sys/stat.h>
 
-bool			cmd_mkdir(int sock, uint64_t body_size)
+bool			cmd_get(int sock, uint64_t body_size)
 {
 	char			buf[MAXPATHLEN];
+	char			*filename;
+	void			*file;
+	size_t			file_size;
 	ssize_t			ret;
-	char			*path;
 
 	if (body_size > MAXPATHLEN)
 		return(cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
@@ -30,17 +30,21 @@ bool			cmd_mkdir(int sock, uint64_t body_size)
 			return (false);
 	}
 
-	path = get_path_from(buf, "mkdir");
-	if (path == NULL)
-		return (cmd_bad(sock, ERR_PERMISSION));
+	filename = simplify_path(buf);
+	if (filename == NULL)
+		return (cmd_bad(sock, ERR_INVALID_FILENAME));
 
-	ret = mkdir(path, S_IRWXU | S_IRGRP | S_IROTH);
+	//send file
 
-	// free(path); //gnebie!
-	if (ret == -1)
-		return(cmd_bad(sock, ERR_CHDIR));
+	file = read_file(filename, &file_size);
 
-	send_answer(sock, ASW_OK, 0);
+	free(filename); /* TODO rm this gnebie!! */
+
+	if (file == NULL)
+		return (cmd_bad(sock, ERR_GET_FILE));
+	send_answer(sock, ASW_OK, file_size);
+	send(sock, file, file_size, 0);
+	free_file(file, file_size);
 
 	return (true);
 }

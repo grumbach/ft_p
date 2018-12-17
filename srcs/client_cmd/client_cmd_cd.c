@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:58 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 18:47:19 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/06 06:58:31 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ bool			cmd_cd(int sock, char *client_input)
 	size_t			body_size;
 
 	body_size = ft_strlen(client_input) + 1;
-	if (body_size > MAXPATHLEN)
-		body_size = MAXPATHLEN;
 
 	send_request(sock, CMD_CD, body_size);
 

@@ -1,18 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_cmd_cd.c                                    :+:      :+:    :+:   */
+/*   server_cmd_mkdir.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/18 19:45:08 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/22 17:16:09 by agrumbac         ###   ########.fr       */
+/*   Created: 2018/11/18 19:43:01 by agrumbac          #+#    #+#             */
+/*   Updated: 2018/12/17 02:29:02 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
+#include <sys/types.h>
+#include <sys/stat.h>
 
-bool			cmd_cd(int sock, uint64_t body_size)
+bool			cmd_mkdir(int sock, uint64_t body_size)
 {
 	char			buf[MAXPATHLEN];
 	ssize_t			ret;
@@ -28,13 +30,14 @@ bool			cmd_cd(int sock, uint64_t body_size)
 			return (false);
 	}
 
-	path = get_path_from(buf, "cd");
+	path = simplify_path(buf);
 	if (path == NULL)
 		return (cmd_bad(sock, ERR_PERMISSION));
 
-	ret = chdir(path);
+	ret = mkdir(path, S_IRWXU | S_IRGRP | S_IROTH);
 
-	// free(path); //gnebie!
+	free(path); //TODO rm this gnebie!
+
 	if (ret == -1)
 		return(cmd_bad(sock, ERR_CHDIR));
 

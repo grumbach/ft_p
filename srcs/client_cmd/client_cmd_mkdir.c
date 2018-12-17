@@ -1,20 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   client_cmd_bad.c                                   :+:      :+:    :+:   */
+/*   client_cmd_mkdir.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/18 19:46:40 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 18:38:49 by agrumbac         ###   ########.fr       */
+/*   Created: 2018/11/18 19:47:12 by agrumbac          #+#    #+#             */
+/*   Updated: 2018/12/17 05:57:05 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-bool			cmd_bad(__unused int sock, char *client_input)
+bool			cmd_mkdir(int sock, char *client_input)
 {
-	if (client_input[0] != '\n')
-		warn("unrecognized command");
+	t_ftp_header	answer;
+	size_t			body_size;
+
+	body_size = ft_strlen(client_input) + 1;
+
+	send_request(sock, CMD_MKDIR, body_size);
+
+	send(sock, client_input, body_size, 0);
+
+	if (recieve_answer(sock, &answer) == false)
+		return (false);
+
 	return (true);
+
 }

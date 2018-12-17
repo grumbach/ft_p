@@ -6,7 +6,7 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/10 17:19:11 by agrumbac          #+#    #+#              #
-#    Updated: 2018/11/22 17:15:49 by agrumbac         ###   ########.fr        #
+#    Updated: 2018/12/17 03:51:48 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,30 +18,28 @@ CLIENT_NAME = client
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -fsanitize=address,undefined -g
+CFLAGS = -Wall -Wextra -fsanitize=address,undefined -g -MMD
 
 COMMON_SRC = socket.c errors.c socket_io.c file_io.c string_checking.c
 
-SERVER_SRC = ${COMMON_SRC} server.c \
-simplify_path.c \
-server_fork.c \
-server_cmd_pwd.c \
-server_cmd_put.c \
-server_cmd_bad.c \
-server_cmd_ls.c \
-server_cmd_mkdir.c \
-server_cmd_cd.c \
-server_cmd_get.c
+SERVER_SRC = ${COMMON_SRC} server.c simplify_path.c server_fork.c \
+server_cmd/server_cmd_pwd.c \
+server_cmd/server_cmd_put.c \
+server_cmd/server_cmd_bad.c \
+server_cmd/server_cmd_ls.c \
+server_cmd/server_cmd_mkdir.c \
+server_cmd/server_cmd_cd.c \
+server_cmd/server_cmd_get.c
 
-CLIENT_SRC = ${COMMON_SRC} client.c client_parse.c \
-client_cmd_pwd.c \
-client_cmd_put.c \
-client_cmd_bad.c \
-client_cmd_ls.c \
-client_cmd_mkdir.c \
-client_cmd_cd.c \
-client_cmd_get.c \
-client_cmd_quit.c
+CLIENT_SRC = ${COMMON_SRC} client.c client_lexer.c \
+client_cmd/client_cmd_pwd.c \
+client_cmd/client_cmd_put.c \
+client_cmd/client_cmd_bad.c \
+client_cmd/client_cmd_ls.c \
+client_cmd/client_cmd_mkdir.c \
+client_cmd/client_cmd_cd.c \
+client_cmd/client_cmd_get.c \
+client_cmd/client_cmd_quit.c
 
 SRCDIR = srcs
 
@@ -51,7 +49,7 @@ LIB = -Llibft/ -lft
 
 INCLUDES = -Ilibft/includes/ -Iincludes/
 
-DEP = includes/ft_p.h libft/libft.a
+EXT = libft/libft.a
 
 ############################## COLORS ##########################################
 
@@ -83,33 +81,35 @@ libft/%:
 	@[[ -d libft ]] || (echo ${M}Cloning"   "[libft]...${X} && git clone https://github.com/grumbach/libft &>/dev/null)
 	@make -C libft
 
-############################## NM ##############################################
+############################## SERVER ##########################################
 
 SERVER_OBJ = $(addprefix ${OBJDIR}/, $(SERVER_SRC:.c=.o))
+CLIENT_DEP = $(addprefix ${OBJDIR}/, $(SERVER_SRC:.c=.d))
 
 ${SERVER_NAME}: ${SERVER_OBJ}
 	@echo ${B}Compiling [${SERVER_NAME}]...${X}
 	@${CC} ${CFLAGS} ${INCLUDES} ${LIB} -o $@ ${SERVER_OBJ}
 	@echo ${G}Success"   "[${SERVER_NAME}]${X}
 
-${OBJDIR}/%.o: ${SRCDIR}/%.c ${DEP}
+${OBJDIR}/%.o: ${SRCDIR}/%.c ${EXT}
 	@echo ${Y}Compiling [$@]...${X}
-	@/bin/mkdir -p ${OBJDIR}
+	@/bin/mkdir -p ${OBJDIR} ${OBJDIR}/client_cmd ${OBJDIR}/server_cmd
 	@${CC} ${CFLAGS} ${INCLUDES} -c -o $@ $<
 	@printf ${UP}${CUT}
 
-############################## OTOOL ###########################################
+############################## CLIENT ##########################################
 
 CLIENT_OBJ = $(addprefix ${OBJDIR}/, $(CLIENT_SRC:.c=.o))
+CLIENT_DEP = $(addprefix ${OBJDIR}/, $(CLIENT_SRC:.c=.d))
 
 ${CLIENT_NAME}: ${CLIENT_OBJ}
 	@echo ${B}Compiling [${CLIENT_NAME}]...${X}
 	@${CC} ${CFLAGS} ${INCLUDES} ${LIB} -o $@ ${CLIENT_OBJ}
 	@echo ${G}Success"   "[${CLIENT_NAME}]${X}
 
-${OBJDIR}/%.o: ${SRCDIR}/%.c ${DEP}
+${OBJDIR}/%.o: ${SRCDIR}/%.c ${EXT}
 	@echo ${Y}Compiling [$@]...${X}
-	@/bin/mkdir -p ${OBJDIR}
+	@/bin/mkdir -p ${OBJDIR} ${OBJDIR}/server_cmd ${OBJDIR}/client_cmd
 	@${CC} ${CFLAGS} ${INCLUDES} -c -o $@ $<
 	@printf ${UP}${CUT}
 
@@ -165,3 +165,6 @@ art:
 	@echo ${X}
 
 .PHONY: all clean fclean re art
+
+-include ${CLIENT_DEP}
+-include ${SERVER_DEP}

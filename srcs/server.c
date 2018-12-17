@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:06 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 20:16:23 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 06:12:30 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 void			signal_handler(__unused int sig)
 {
-	//TODO manage errors
 	socket_cleanup();
 	ft_puts("\n"FTP_LOG"Exiting...");
 	exit(EXIT_SUCCESS);

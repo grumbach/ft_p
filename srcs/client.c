@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:03 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 19:54:37 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 06:16:11 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Client actions
 */
 
-static bool	(*execute_command[CMD_LAST])(int, char*) =
+static bool	(*execute_command[])(int, char*) =
 {
 	[CMD_BAD] = &cmd_bad,
 	[CMD_LS] = &cmd_ls,
@@ -34,13 +34,13 @@ static int	prompt(char *client_input)
 
 	ft_printf("\e[34m[\e[32mft_p\e[34m]$> \e[0m");
 
-	read_chars = read(0, client_input, FTP_CLIENT_MAX_INPUT - 1);
+	read_chars = read(0, client_input, MAXPATHLEN - 1);
 	if (read_chars < 0)
 		fatal("Failed to read on stdin");
 	if (read_chars == 0)
 		return (0);
 
-	client_input[read_chars - 1] = '\0'; //remove '\n'
+	client_input[read_chars - 1] = '\0';
 	return (read_chars);
 }
 
@@ -50,15 +50,18 @@ static int	prompt(char *client_input)
 
 void			client_shell(int sock)
 {
-	char			client_input[FTP_CLIENT_MAX_INPUT];
-	enum e_cmd		cmd;
+	char			client_input[MAXPATHLEN];
+	char			*input_arg;
+	int				cmd;
 
 	while (1)
 	{
 		if (prompt(client_input) == 0)
 			break ;
-		cmd = determine_command(client_input);
-		execute_command[cmd](sock, client_input);
+		cmd = lexer(client_input, &input_arg);
+		if (cmd == -1)
+			continue ;
+		execute_command[cmd](sock, input_arg);
 		if (cmd == CMD_QUIT)
 			break ;
 	}
