@@ -1,20 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server_cmd_mkdir.c                                 :+:      :+:    :+:   */
+/*   server_cmd_cd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/18 19:43:01 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/22 17:17:35 by agrumbac         ###   ########.fr       */
+/*   Created: 2018/11/18 19:45:08 by agrumbac          #+#    #+#             */
+/*   Updated: 2018/12/06 07:20:11 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
-#include <sys/types.h>
-#include <sys/stat.h>
 
-bool			cmd_mkdir(int sock, uint64_t body_size)
+bool			cmd_cd(int sock, uint64_t body_size)
 {
 	char			buf[MAXPATHLEN];
 	ssize_t			ret;
@@ -23,20 +21,17 @@ bool			cmd_mkdir(int sock, uint64_t body_size)
 	if (body_size > MAXPATHLEN)
 		return(cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	if (body_size > 0)
+	ret = 0;
+	if (body_size > 0)//TODO test for recv(sock, buf, 0, 0)
 	{
 		ret = recv(sock, buf, body_size, 0);
 		if (ret == 0)
 			return (false);
 	}
 
-	path = get_path_from(buf, "mkdir");
-	if (path == NULL)
-		return (cmd_bad(sock, ERR_PERMISSION));
+	path = simplify_path(buf);
 
-	ret = mkdir(path, S_IRWXU | S_IRGRP | S_IROTH);
-
-	// free(path); //gnebie!
+	ret = chdir(path); /*TODO rm this after issue#5 [FIX]*/ free(path); //gnebie!
 	if (ret == -1)
 		return(cmd_bad(sock, ERR_CHDIR));
 

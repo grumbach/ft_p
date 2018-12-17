@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:46:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 23:10:05 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/06 07:24:02 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,7 @@ bool			cmd_get(int sock, char *client_input)
 	char			*filename;
 
 	body_size = ft_strlen(client_input) + 1;
-	if (body_size > MAXPATHLEN)
-		body_size = MAXPATHLEN;
+
 	filename = get_filename_from(client_input);
 	if (filename == NULL)
 	{
