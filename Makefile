@@ -6,7 +6,7 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/10 17:19:11 by agrumbac          #+#    #+#              #
-#    Updated: 2018/12/17 02:01:25 by agrumbac         ###   ########.fr        #
+#    Updated: 2018/12/17 03:51:48 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ server_cmd/server_cmd_mkdir.c \
 server_cmd/server_cmd_cd.c \
 server_cmd/server_cmd_get.c
 
-CLIENT_SRC = ${COMMON_SRC} client.c client_parse.c \
+CLIENT_SRC = ${COMMON_SRC} client.c client_lexer.c \
 client_cmd/client_cmd_pwd.c \
 client_cmd/client_cmd_put.c \
 client_cmd/client_cmd_bad.c \

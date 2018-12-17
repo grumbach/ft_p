@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:03 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/16 23:27:02 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 05:50:29 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static int	prompt(char *client_input)
 	if (read_chars == 0)
 		return (0);
 
-	client_input[read_chars - 1] = '\0'; //remove '\n'
+	client_input[read_chars - 1] = '\0';
 	return (read_chars);
 }
 
@@ -51,13 +51,16 @@ static int	prompt(char *client_input)
 void			client_shell(int sock)
 {
 	char			client_input[FTP_CLIENT_MAX_INPUT];
-	enum e_cmd		cmd;
+	char			*input_arg;
+	int				cmd;
 
 	while (1)
 	{
 		if (prompt(client_input) == 0)
 			break ;
-		cmd = determine_command(client_input);
+		cmd = lexer(client_input, &input_arg);
+		if (cmd == -1)
+			continue ;
 		execute_command[cmd](sock, client_input);
 		if (cmd == CMD_QUIT)
 			break ;

@@ -6,17 +6,12 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/06 06:22:37 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 02:37:03 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 #include <sys/stat.h>
-
-bool		ft_isspace(const char c)
-{
-	return (c == ' ' || c == '\t');
-}
 
 char		*get_ls_path_arg(char *input)
 {
