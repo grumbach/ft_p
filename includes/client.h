@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:12:17 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 18:39:34 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/06 06:57:18 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define CLIENT_H
 
 # include "ft_p.h"
+
+# define FTP_CLIENT_MAX_INPUT		MAXPATHLEN
 
 enum e_cmd		determine_command(const char *command);
 

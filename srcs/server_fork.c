@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 23:26:39 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/16 23:26:54 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Actual ft_p code from forked server
 */
 
-static bool	(*execute_command[CMD_LAST])(int, uint64_t) =
+static bool	(*execute_command[])(int, uint64_t) =
 {
 	[CMD_BAD] = &cmd_bad,
 	[CMD_LS] = &cmd_ls,

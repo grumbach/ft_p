@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/22 17:16:46 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/16 23:22:02 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define FT_P_H
 
 # define FTP_MAX_QUEUE			5
-# define FTP_CLIENT_MAX_INPUT	2048
 # define FTP_RECV_BUFFER		1024
 
 # include "libft.h"
@@ -45,16 +44,14 @@ enum			e_cmd
 	CMD_GET,    /* download the file file from the server to the client */
 	CMD_PUT,    /* upload the file file from the client to the server */
 	CMD_PWD,    /* display the path of the current server’s directory */
-	CMD_QUIT,   /* cuts the connection + exit the program */
-	CMD_LAST    /* number of CMDs */
+	CMD_QUIT    /* cuts the connection + exit the program (must be last) */
 };
 
 enum			e_answer
 {
 	ASW_BAD,    /* for any invalid commands */
 	ASW_OK,     /* success answer */
-	ASW_MORE,   /* if there is more data to read */
-	ASW_LAST    /* number of ASWs */
+	ASW_MORE    /* if there is more data to read */
 };
 
 /*

@@ -6,11 +6,13 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:44:48 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 15:58:05 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/16 23:28:27 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
+
+#define STRLEN(s)	(sizeof(s)/sizeof(s[0]))
 
 static const char *g_server_errors[] =
 {
@@ -23,21 +25,22 @@ static const char *g_server_errors[] =
 	[ERR_INVALID_FILENAME] = "invalid filename"
 };
 
+static const size_t g_server_errors_len[] =
+{
+	[ERR_BAD_CMD_CODE] = STRLEN(g_server_errors[ERR_BAD_CMD_CODE]),
+	[ERR_CWD] = STRLEN(g_server_errors[ERR_CWD]),
+	[ERR_PATHLEN_OVERFLOW] = STRLEN(g_server_errors[ERR_PATHLEN_OVERFLOW]),
+	[ERR_CHDIR] = STRLEN(g_server_errors[ERR_CHDIR]),
+	[ERR_PERMISSION] = STRLEN(g_server_errors[ERR_PERMISSION]),
+	[ERR_GET_FILE] = STRLEN(g_server_errors[ERR_GET_FILE]),
+	[ERR_INVALID_FILENAME] = STRLEN(g_server_errors[ERR_INVALID_FILENAME])
+};
+
 bool			cmd_bad(int sock, uint64_t body_size)
 {
-	t_ftp_header	answer;
-	size_t			error_len;
+	const size_t	error_len = g_server_errors_len[body_size];
 
-	if (body_size >= ERR_LAST)
-		body_size = 0;
-
-	error_len = ft_strlen(g_server_errors[body_size]) + 1;
-	answer.type = ASW_BAD;
-	answer.body_size = error_len;
-
-	send(sock, &answer, sizeof(answer), 0);
-
+	send_answer(sock, ASW_BAD, error_len);
 	send(sock, g_server_errors[body_size], error_len, 0);
-
 	return (true);
 }

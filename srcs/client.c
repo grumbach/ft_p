@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:03 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 19:54:37 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/16 23:27:02 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 ** Client actions
 */
 
-static bool	(*execute_command[CMD_LAST])(int, char*) =
+static bool	(*execute_command[])(int, char*) =
 {
 	[CMD_BAD] = &cmd_bad,
 	[CMD_LS] = &cmd_ls,
