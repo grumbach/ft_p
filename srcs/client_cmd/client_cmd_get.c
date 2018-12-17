@@ -6,61 +6,11 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:46:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 06:03:27 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 06:51:08 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
-
-static bool		recieve_file(int sock, const char *filename, size_t body_size)
-{
-	char		buf[FTP_RECV_BUFFER];
-	int			fd;
-	ssize_t		ret;
-
-	fd = open(filename, O_CREAT | O_WRONLY);
-	if (fd < 0)
-	{
-		warn("failed to open file for writing");
-		return (true);
-	}
-	while (body_size > 0)
-	{
-		ret = recv(sock, buf, FTP_RECV_BUFFER, 0);
-		if (ret == 0)
-		{
-			close(fd);
-			return (false);
-		}
-		if (ret == -1)
-		{
-			close(fd);
-			warn("failed to recieve file content form server");
-			return (true);
-		}
-		write(fd, buf, ret);
-		body_size -= ret;
-	}
-	close(fd);
-	return (true);
-}
-
-static char		*get_filename_from(char *client_input)
-{
-	char		*filename;
-
-	// path case
-	filename = ft_strlaststr(client_input, "/");
-	// filename case
-	if (filename == NULL)
-		filename = client_input;
-	else
-		filename += 1; // skip "/"
-
-	if (filename_invalid(filename))
-		return (NULL);
-	return (filename);
-}
 
 bool			cmd_get(int sock, char *client_input)
 {

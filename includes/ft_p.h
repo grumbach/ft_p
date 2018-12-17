@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/16 23:22:02 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 06:58:20 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,12 +80,12 @@ void			send_request(int sock, const int type, const size_t body_size);
 void			send_answer(int sock, const int type, const size_t body_size);
 bool			recieve_error(int sock, size_t message_len);
 bool			recieve_answer(int sock, t_ftp_header *answer);
+bool			recieve_file(int sock, const char *filename, size_t body_size);
 
 void			*read_file(const char *filename, size_t *file_size);
 void			free_file(void *file, size_t file_size);
 
-char			*get_path_from(const char *buf, const char *cmd);
-bool			filename_invalid(const char *filename);
+char			*get_filename_from(char *client_input);
 
 void			fatal(const char *error);
 char			*simplify_path(char *path);
