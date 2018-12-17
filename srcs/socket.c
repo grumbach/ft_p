@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_p.c                                             :+:      :+:    :+:   */
+/*   socket.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:18:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/03 17:41:23 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/11/18 18:45:03 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,13 +21,13 @@ static int		g_sock;
 static void		client_init(struct sockaddr_in *sockaddr)
 {
 	if (connect(g_sock, (struct sockaddr *)sockaddr , sizeof(*sockaddr)) < 0)
-		fatal("Failed to connect");
+		fatal("failed to connect");
 }
 
 static void		server_init(struct sockaddr_in *sockaddr)
 {
 	if (bind(g_sock, (struct sockaddr *)sockaddr , sizeof(*sockaddr)) < 0)
-		fatal("Failed to bind socket");
+		fatal("failed to bind socket");
 
 	listen(g_sock, FTP_MAX_QUEUE);
 }
@@ -48,11 +48,11 @@ int				socket_init(char *address, int port, enum e_mode is_server)
 	g_sock = socket(PF_INET , SOCK_STREAM , 0);
 
 	if (g_sock == -1)
-		fatal("Failed to create socket");
+		fatal("failed to create socket");
 
 	//for faster server relaunch
 	if (setsockopt(g_sock, SOL_SOCKET, SO_REUSEADDR, &(int){ 1 }, sizeof(int)) < 0)
-		fatal("Failed to setsockopt(SO_REUSEADDR)");
+		fatal("failed to setsockopt(SO_REUSEADDR)");
 
 	sockaddr.sin_family = PF_INET;
 	sockaddr.sin_addr.s_addr = address ? inet_addr(address) : INADDR_ANY;
