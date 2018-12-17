@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:46:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/06 07:24:02 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 06:03:27 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,16 +49,11 @@ static char		*get_filename_from(char *client_input)
 {
 	char		*filename;
 
-	//last slash in client_input
+	// path case
 	filename = ft_strlaststr(client_input, "/");
-	//if not client_input
+	// filename case
 	if (filename == NULL)
-	{
-		filename = ft_strstr(client_input, "get");
-		if (filename == NULL)
-			return (NULL);
-		filename += 3; // skip "get"
-	}
+		filename = client_input;
 	else
 		filename += 1; // skip "/"
 

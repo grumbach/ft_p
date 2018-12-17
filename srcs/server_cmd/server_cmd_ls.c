@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 02:37:03 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 06:12:06 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,6 @@
 char		*get_ls_path_arg(char *input)
 {
 	char		*simple_path;
-
-	// TODO remove this
-	if (ft_strlen(input) < 2) // strlen ls == 2
-		return (NULL);
-	input += 2;
-	// TODO remove this
-
 
 	while (ft_isspace(*input))
 		input++;

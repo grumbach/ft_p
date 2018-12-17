@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:20:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 05:49:15 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 06:09:26 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,6 @@ int					lexer(const char *client_input, char **input_arg)
 
 	// check for separator
 	client_input += cmd_len[cmd];
-	ft_printf("[%d] %d '%c'\n", cmd , *client_input, *client_input);
 	if (*client_input != '\0' && !ft_isspace(*client_input))
 		return (CMD_BAD);
 

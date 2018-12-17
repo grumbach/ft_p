@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:03 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 05:50:29 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 06:16:11 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static int	prompt(char *client_input)
 
 	ft_printf("\e[34m[\e[32mft_p\e[34m]$> \e[0m");
 
-	read_chars = read(0, client_input, FTP_CLIENT_MAX_INPUT - 1);
+	read_chars = read(0, client_input, MAXPATHLEN - 1);
 	if (read_chars < 0)
 		fatal("Failed to read on stdin");
 	if (read_chars == 0)
@@ -50,7 +50,7 @@ static int	prompt(char *client_input)
 
 void			client_shell(int sock)
 {
-	char			client_input[FTP_CLIENT_MAX_INPUT];
+	char			client_input[MAXPATHLEN];
 	char			*input_arg;
 	int				cmd;
 
@@ -61,7 +61,7 @@ void			client_shell(int sock)
 		cmd = lexer(client_input, &input_arg);
 		if (cmd == -1)
 			continue ;
-		execute_command[cmd](sock, client_input);
+		execute_command[cmd](sock, input_arg);
 		if (cmd == CMD_QUIT)
 			break ;
 	}
