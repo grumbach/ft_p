@@ -71,6 +71,8 @@ bool			cmd_ls(int sock, uint64_t body_size)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 	if (recv(sock, path, body_size, 0) == 0)
 		return (false);
+	if (*path == '\0')
+		ft_strcpy(path, ".");
 	if ((real_path = simplify_path(path)) == NULL)
 		return (cmd_bad(sock, ERR_PERMISSION));
 
