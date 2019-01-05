@@ -26,6 +26,12 @@ void		send_answer(int sock, const int type, const size_t body_size)
 	send_request(sock, type, body_size);
 }
 
+void		send_full_answer(int sock, const int type, char *body, const ssize_t body_size)
+{
+	send_answer(sock, type, body_size);
+	send(sock, body, body_size, 0);
+}
+
 bool		recieve_error(int sock, size_t message_len)
 {
 	char		buf[FTP_RECV_BUFFER];

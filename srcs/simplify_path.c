@@ -12,7 +12,7 @@ typedef struct		s_array
 	size_t	real_size;
 }					t_array;
 
-char *ft_strjoin(char *s1, char *s2)
+char *ft_strjoin(const char *s1, const char *s2)
 {
 	char *s3;
 

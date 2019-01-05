@@ -78,6 +78,7 @@ void			socket_cleanup(void);
 
 void			send_request(int sock, const int type, const size_t body_size);
 void			send_answer(int sock, const int type, const size_t body_size);
+void			send_full_answer(int sock, const int type, char *body, const ssize_t body_size);
 bool			recieve_error(int sock, size_t message_len);
 bool			recieve_answer(int sock, t_ftp_header *answer);
 bool			recieve_file(int sock, const char *filename, size_t body_size);
