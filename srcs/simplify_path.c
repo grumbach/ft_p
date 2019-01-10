@@ -12,7 +12,7 @@ typedef struct		s_array
 	size_t	real_size;
 }					t_array;
 
-char *ft_strjoin(const char *s1, const char *s2)
+char *ft_strjoin(char *s1, char *s2)
 {
 	char *s3;
 
@@ -283,20 +283,63 @@ char		*add_root(char *path)
 
 char		*simplify_path(char *path)
 {
-	t_array		*path_tab;
+	// t_array		*path_tab;
+	char		path_buff[MAXPATHLEN];
+	size_t		len_gpath;
 
+
+	len_gpath = ft_strlen(g_root_path);
+	ft_printf("path give : %s %li\n", path, len_gpath);
 	if (!path)
 		return (NULL);
-	path = get_real_path(path);
-	path_tab = ft_strsplit_to_array(path, '/');
-	free(path);
-	if (path_tab == NULL)
-		path = ft_strdup("/");
+
+	if (path[0] == '/')
+		ft_strncpy(path_buff, path, MAXPATHLEN);
 	else
 	{
-		path_tab = remove_path_returns(path_tab);
-		path = ft_concat_and_delete_array(path_tab, "/");
+		getcwd(path_buff, MAXPATHLEN);
+		if (ft_strncmp(path_buff, g_root_path, len_gpath))
+			return (NULL);
+		ft_memmove(path_buff, &path_buff[len_gpath], ft_strlen(path_buff) - len_gpath);
+		path_buff[ft_strlen(path_buff) - len_gpath] = 0;
+		ft_strncat(path_buff, "/", 2);
+		ft_strncat(path_buff, path, ft_strlen(path));
 	}
-	path = add_root(path);
-	return (path);
+	ft_printf("path find : %s \n", path_buff);
+
+	int		i = 0;
+	size_t		len = ft_strlen(path_buff);
+	while (path_buff[i])
+	{
+		if (ft_strncmp(&path_buff[i], "/../", 4))
+		{
+			ft_strcpy(&path_buff[i], &path_buff[i + 3]);
+			if (i != 0)
+			{
+				
+				// find last '/' and remove all betwen it
+			}
+		}
+		else if (ft_strncmp(&path_buff[i], "/./", 3))
+			ft_strcpy(&path_buff[i], &path_buff[i + 2]);
+		else
+			i++;
+	}
+
+	return (ft_strdup(path));
+
+
+
+	// path = get_real_path(path);
+	// path_tab = ft_strsplit_to_array(path, '/');
+	// free(path);
+	// if (path_tab == NULL)
+	// 	path = ft_strdup("/");
+	// else
+	// {
+	// 	path_tab = remove_path_returns(path_tab);
+	// 	path = ft_concat_and_delete_array(path_tab, "/");
+	// }
+	// path = add_root(path);
+	// return (path);
 }
