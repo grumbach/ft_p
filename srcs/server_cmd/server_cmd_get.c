@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:12 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 02:17:20 by agrumbac         ###   ########.fr       */
+/*   Updated: 2018/12/17 07:53:55 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,9 @@ bool			cmd_get(int sock, uint64_t body_size)
 	if (body_size > MAXPATHLEN)
 		return(cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	if (body_size > 0)
-	{
-		ret = recv(sock, buf, body_size, 0);
-		if (ret == 0)
-			return (false);
-	}
+	ret = recv(sock, buf, body_size, 0);
+	if (ret == 0)
+		return (false);
 
 	filename = simplify_path(buf);
 	if (filename == NULL)

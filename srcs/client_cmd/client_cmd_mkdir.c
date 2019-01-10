@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:47:12 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 05:57:05 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/09 22:23:15 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ bool			cmd_mkdir(int sock, char *client_input)
 
 	send(sock, client_input, body_size, 0);
 
-	if (recieve_answer(sock, &answer) == false)
+	if (receive_answer(sock, &answer) == false)
 		return (false);
 
 	return (true);

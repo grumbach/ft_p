@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 18:45:55 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/11/20 23:26:51 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/09 22:23:15 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,11 @@ bool			cmd_pwd(int sock, __unused char *client_input)
 
 	send_request(sock, CMD_PWD, 0);
 
-	if (recieve_answer(sock, &answer) == false)
+	if (receive_answer(sock, &answer) == false)
 		return (false);
-
 	if (answer.type != ASW_OK)
+		return (true);
+	if (answer.body_size >= MAXPATHLEN)
 		return (true);
 
 	ret = recv(sock, path, answer.body_size, 0);
@@ -31,7 +32,7 @@ bool			cmd_pwd(int sock, __unused char *client_input)
 		return (false);
 	if (ret == -1)
 	{
-		warn("failed to recieve path from server");
+		warn("failed to receive path from server");
 		return (true);
 	}
 

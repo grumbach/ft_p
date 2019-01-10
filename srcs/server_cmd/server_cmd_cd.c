@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:08 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 02:21:36 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/05 17:30:39 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,13 @@ bool			cmd_cd(int sock, uint64_t body_size)
 	if (body_size > MAXPATHLEN)
 		return(cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
 
-	if (body_size > 0)//TODO test for recv(sock, buf, 0, 0)
-	{
-		ret = recv(sock, buf, body_size, 0);
-		if (ret == 0)
-			return (false);
-	}
+	ret = recv(sock, buf, body_size, 0);
+	if (ret == 0)
+		return (false);
 
 	path = simplify_path(buf);
+	if (path == NULL)
+		return (cmd_bad(sock, ERR_PERMISSION));
 
 	ret = chdir(path);
 

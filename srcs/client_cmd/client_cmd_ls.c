@@ -6,13 +6,13 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:47:09 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/06 06:29:09 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/09 22:23:15 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-bool		recieve_body(int sock, t_ftp_header answer, char *body)
+bool		receive_body(int sock, t_ftp_header answer, char *body)
 {
 	int		ret;
 
@@ -27,7 +27,7 @@ bool		recieve_body(int sock, t_ftp_header answer, char *body)
 		return (false);
 	if (ret == -1)
 	{
-		warn("failed to recieve answer body from server");
+		warn("failed to receive answer body from server");
 		return (true);
 	}
 
@@ -49,11 +49,11 @@ bool			cmd_ls(int sock, char *client_input)
 	answer.type = ASW_MORE;
 	while (answer.type == ASW_MORE)
 	{
-		if (recieve_answer(sock, &answer) == false) // a changer <= boucle
+		if (receive_answer(sock, &answer) == false) // a changer <= boucle
 			return (false);
 		if (answer.type == ASW_OK || answer.type == ASW_MORE)
 		{
-			if (recieve_body(sock, answer, body) == false)
+			if (receive_body(sock, answer, body) == false)
 				return (false);
 			write(1, body, answer.body_size);
 		}

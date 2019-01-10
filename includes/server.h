@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:10:58 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 05:39:25 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/10 18:02:54 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "ft_p.h"
 
-void			no_return_child_code(int client_sock);
+void			no_return_child_code(int client_sock) __attribute__((noreturn));
 
 /*
 ** Server error codes

@@ -265,6 +265,7 @@ char		*ft_concat_and_delete_array(t_array *array, char *concat_str)
 	return (str);
 }
 
+__attribute__((warn_unused_result))
 bool		set_root_path(void)
 {
 	if (getcwd(g_root_path, MAXPATHLEN) == NULL)

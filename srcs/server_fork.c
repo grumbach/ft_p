@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/16 23:26:54 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/10 17:11:30 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,14 @@ void		no_return_child_code(int sock)
 			request.body_size = ERR_BAD_CMD_CODE;
 		}
 
-		ft_printf(FTP_LOG "\t\t{%d}\trecieved command %d\n", sock, request.type);
+		ft_printf(FTP_LOG "\t\t{%d}\treceived command %d\n", sock, request.type);
 		if (!execute_command[request.type](sock, request.body_size))
 			break ;
 	}
 
 	ft_printf(FTP_LOG "\t\t{%d}\tclosing socket\n", sock);
-	close(sock);
+
+	if (close(sock) == -1)
+		warn("Failed closing socket");
 	exit(EXIT_SUCCESS);
 }

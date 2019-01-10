@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:04:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 06:48:37 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/10 18:01:24 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void		send_full_answer(int sock, const int type, char *body, const ssize_t body_
 	send(sock, body, body_size, 0);
 }
 
-bool		recieve_error(int sock, size_t message_len)
+static bool	receive_error(int sock, size_t message_len)
 {
 	char		buf[FTP_RECV_BUFFER];
 	ssize_t		ret;
@@ -46,7 +46,7 @@ bool		recieve_error(int sock, size_t message_len)
 		if (ret == -1)
 		{
 			ft_printf("\n");
-			warn("failed to recieve error string form server");
+			warn("failed to receive error string form server");
 			return (true);
 		}
 
@@ -57,7 +57,8 @@ bool		recieve_error(int sock, size_t message_len)
 	return (true);
 }
 
-bool		recieve_answer(int sock, t_ftp_header *answer)
+// TODO this func is used by client only, move away
+bool		receive_answer(int sock, t_ftp_header *answer)
 {
 	ssize_t		ret;
 
@@ -68,16 +69,16 @@ bool		recieve_answer(int sock, t_ftp_header *answer)
 	{
 		answer->type = ASW_BAD;
 		answer->body_size = 0;
-		warn("failed to recieve answer from server");//NB from server?
+		warn("failed to receive answer from server");//NB from server?
 		return (true);
 	}
 
 	if (answer->type == ASW_BAD)
-		return (recieve_error(sock, answer->body_size));
+		return (receive_error(sock, answer->body_size));
 	return (true);
 }
 
-bool		recieve_file(int sock, const char *filename, size_t body_size)
+bool		receive_file(int sock, const char *filename, size_t body_size)
 {
 	char		buf[FTP_RECV_BUFFER];
 	int			fd;
@@ -100,7 +101,7 @@ bool		recieve_file(int sock, const char *filename, size_t body_size)
 		if (ret == -1)
 		{
 			close(fd);
-			warn("failed to recieve file content form server");
+			warn("failed to receive file content form server");
 			return (true);
 		}
 		write(fd, buf, ret);
