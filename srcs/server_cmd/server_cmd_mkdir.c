@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:43:01 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 07:48:15 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/10 18:15:52 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,6 @@ bool			cmd_mkdir(int sock, uint64_t body_size)
 		return (cmd_bad(sock, ERR_PERMISSION));
 
 	ret = mkdir(path, S_IRWXU | S_IRGRP | S_IROTH);
-
-	free(path); //TODO rm this gnebie!
 
 	if (ret == -1)
 		return(cmd_bad(sock, ERR_CHDIR));

@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:12 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 07:53:55 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/10 18:15:47 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,6 @@ bool			cmd_get(int sock, uint64_t body_size)
 	//send file
 
 	file = read_file(filename, &file_size);
-
-	free(filename); /* TODO rm this gnebie!! */
 
 	if (file == NULL)
 		return (cmd_bad(sock, ERR_GET_FILE));
