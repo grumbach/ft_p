@@ -65,7 +65,7 @@ bool		launch_ls(int sock, const char *real_path, const char *path)
 bool			cmd_ls(int sock, uint64_t body_size)
 {
 	char			path[MAXPATHLEN + 1];
-	char			*real_path;
+	char			real_path[MAXPATHLEN + 1];
 
 	if (body_size > MAXPATHLEN)
 		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
@@ -73,7 +73,8 @@ bool			cmd_ls(int sock, uint64_t body_size)
 		return (false);
 	if (*path == '\0')
 		ft_strcpy(path, ".");
-	if ((real_path = simplify_path(path)) == NULL)
+	ft_strcpy(real_path, path);
+	if (simplify_path(real_path) == NULL)
 		return (cmd_bad(sock, ERR_PERMISSION));
 
 	launch_ls(sock, real_path, path);

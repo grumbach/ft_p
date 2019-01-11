@@ -3,7 +3,8 @@
 #include <sys/param.h>
 #include <unistd.h>
 
-static char g_root_path[MAXPATHLEN];
+static char			g_root_path[MAXPATHLEN];
+static size_t		g_root_path_len;
 
 typedef struct		s_array
 {
@@ -289,49 +290,43 @@ bool		set_root_path(void)
 {
 	if (getcwd(g_root_path, MAXPATHLEN) == NULL)
 		return (false);
+	g_root_path_len = ft_strlen(g_root_path);
 	return (true);
 }
 
 
-static void		clean_tmp_path(char *path_tmp)
+static void		clean_tmp_path(char *path)
 {
 	int			i;
 	int			j;
 
 	i = 0;
-	while (path_tmp[i])
+	while (path[i])
 	{
-		if (!ft_strncmp(&path_tmp[i], "//", 2))
-			ft_strcpy(&path_tmp[i], &path_tmp[i + 1]);
-		else if (!ft_strncmp(&path_tmp[i], "/../", 4))
+		if (!ft_strncmp(&path[i], "/../", 4) || !ft_strcmp(&path[i], "/.."))
 		{
-			ft_strcpy(&path_tmp[i], &path_tmp[i + 3]);
+			ft_strcpy(&path[i], &path[i + 3]);
 			if (i != 0)
 			{
 				j = i - 1;
-				while (j > 0 && path_tmp[j] != '/')
+				while (j > 0 && path[j] != '/')
 					j--;
-				ft_strcpy(&path_tmp[j + 1], &path_tmp[i]);
+				ft_strcpy(&path[j + 1], &path[i]);
 				i = j;
 			}
 		}
-		else if (!ft_strncmp(&path_tmp[i], "/./", 3))
-			ft_strcpy(&path_tmp[i], &path_tmp[i + 2]);
+		else if (!ft_strncmp(&path[i], "//", 2))
+			ft_strcpy(&path[i], &path[i + 1]);
+		else if (!ft_strncmp(&path[i], "/./", 3) || !ft_strcmp(&path[i], "/."))
+			ft_strcpy(&path[i], &path[i + 2]);
 		else
 			i++;
 	}
-	ft_printf("path clean find : %s \n", path_tmp); // TODO delete debbug infos
 }
 
-char		*simplify_path(char *path)
+char		*simplify_path(char *path) // TODO Changer le type pour un bool
 {
 	char		path_tmp[MAXPATHLEN * 2];
-	size_t		len_gpath;
-
-	len_gpath = ft_strlen(g_root_path);
-
-	ft_printf("path origin : %s %li\n", g_root_path, len_gpath); // TODO delete debbug infos
-	ft_printf("path give : %s %li\n", path, len_gpath);// TODO delete debbug infos
 
 	if (!path) // assume que path fait toujours moins que MAXPATHLEN
 		return (NULL);
@@ -341,29 +336,17 @@ char		*simplify_path(char *path)
 	else
 	{
 		getcwd(path_tmp, MAXPATHLEN);
-		if (ft_strncmp(path_tmp, g_root_path, len_gpath))
+		if (ft_strncmp(path_tmp, g_root_path, g_root_path_len))
 			return (NULL);
-		ft_strcpy(path_tmp, &path_tmp[len_gpath]); // Buffer overflow ??
-		// path_tmp[ft_strlen(path_tmp) - len_gpath] = 0;
+		ft_strcpy(path_tmp, &path_tmp[g_root_path_len]);
 		ft_strncat(path_tmp, "/", 2);
 		ft_strncat(path_tmp, path, ft_strlen(path));
 	}
 
-	ft_printf("path find : %s \n", path_tmp);// TODO delete debbug infos
-	if (path_tmp[0] != '/') // overprotection for the tests // TODO delete it
-	{
-		warn("path invalid");
-		ft_printf("path invalid : %s \n", path_tmp);// TODO delete debbug infos
-		return (NULL);
-	}
-
 	clean_tmp_path(path_tmp);
-	if (ft_strlen(path_tmp) + ft_strlen(g_root_path) > MAXPATHLEN)
+	if (ft_strlen(path_tmp) + g_root_path_len > MAXPATHLEN)
 		return (NULL);
 	ft_strcpy(path, g_root_path);
 	ft_strncat(path, path_tmp, ft_strlen(path_tmp));
-
-	ft_printf("path final find : %s \n", path);// TODO delete debbug infos
-	// return le buffer envoyé
-	return (ft_strdup(path)); // TODO enlever le strdup quand free enlevés
+	return (path);
 }
