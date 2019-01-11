@@ -46,33 +46,35 @@ size_t			root_path_len(void)
 **   path must be MAXPATHLEN
 */
 
-static void		clean_tmp_path(char *path)
+static void		clean_tmp_path(char *path_tmp)
 {
+	char		path[MAXPATHLEN * 2];
 	int			i;
 	int			j;
 
 	i = 0;
+	j = 0;
+	ft_strcpy(path, path_tmp);
 	while (path[i])
 	{
 		if (!ft_strncmp(&path[i], "/../", 4) || !ft_strcmp(&path[i], "/.."))
 		{
-			ft_strcpy(&path[i], &path[i + 3]);
-			if (i != 0)
-			{
-				j = i - 1;
-				while (j > 0 && path[j] != '/')
-					j--;
-				ft_strcpy(&path[j + 1], &path[i]);
-				i = j;
-			}
+			i += 3;
+			if (j > 0)
+				j--;
+			while (j > 0 && path_tmp[j] != '/')
+				j--;
 		}
 		else if (!ft_strncmp(&path[i], "//", 2))
-			ft_strcpy(&path[i], &path[i + 1]);
-		else if (!ft_strncmp(&path[i], "/./", 3) || !ft_strcmp(&path[i], "/."))
-			ft_strcpy(&path[i], &path[i + 2]);
-		else
 			i++;
+		else if (!ft_strncmp(&path[i], "/./", 3) || !ft_strcmp(&path[i], "/."))
+			i += 2;
+		else
+			path_tmp[j++] = path[i++];
 	}
+	if (j == 0)
+		path_tmp[j++] = '/';
+	path_tmp[j] = '\0';
 }
 
 __attribute__((nonnull))
