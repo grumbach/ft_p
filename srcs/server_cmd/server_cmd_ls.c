@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 06:12:06 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/11 16:38:44 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,9 @@ bool			cmd_ls(int sock, uint64_t body_size)
 		return (false);
 	if (*path == '\0')
 		ft_strcpy(path, ".");
-	if ((real_path = simplify_path(path)) == NULL)
+
+	real_path = simplify_path(path);
+	if (real_path == NULL)
 		return (cmd_bad(sock, ERR_PERMISSION));
 
 	launch_ls(sock, real_path, path);
