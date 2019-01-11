@@ -12,6 +12,10 @@ typedef struct		s_array
 	size_t	real_size;
 }					t_array;
 
+/*
+** Ne pas rm -rf ce qu'il y a au dessus ! de ce commentaire
+*/
+
 char *ft_strjoin(char *s1, char *s2)
 {
 	char *s3;
@@ -265,13 +269,6 @@ char		*ft_concat_and_delete_array(t_array *array, char *concat_str)
 	return (str);
 }
 
-bool		set_root_path(void)
-{
-	if (getcwd(g_root_path, MAXPATHLEN) == NULL)
-		return (false);
-	return (true);
-}
-
 char		*add_root(char *path)
 {
 	char		*new_path;
@@ -281,65 +278,92 @@ char		*add_root(char *path)
 	return (new_path);
 }
 
-char		*simplify_path(char *path)
+/*
+** *********************** Tout le code avant cette ligne ne sert a rien et doit etre rm -rf
+** *********************** Je le garde juste pour que mon fichier fasse 300 ligne et soit plein de mallocs
+** *********************** Et q'il dise que c'est horrible jusqu'a tomber sur ce commentaire
+** *********************** et etre super content de pouvoir rm -rf tout ce qu'il y a au dessus
+*/
+
+bool		set_root_path(void)
 {
-	// t_array		*path_tab;
-	char		path_buff[MAXPATHLEN];
-	size_t		len_gpath;
+	if (getcwd(g_root_path, MAXPATHLEN) == NULL)
+		return (false);
+	return (true);
+}
 
 
-	len_gpath = ft_strlen(g_root_path);
-	ft_printf("path give : %s %li\n", path, len_gpath);
-	if (!path)
-		return (NULL);
+static void		clean_tmp_path(char *path_tmp)
+{
+	int			i;
+	int			j;
 
-	if (path[0] == '/')
-		ft_strncpy(path_buff, path, MAXPATHLEN);
-	else
+	i = 0;
+	while (path_tmp[i])
 	{
-		getcwd(path_buff, MAXPATHLEN);
-		if (ft_strncmp(path_buff, g_root_path, len_gpath))
-			return (NULL);
-		ft_memmove(path_buff, &path_buff[len_gpath], ft_strlen(path_buff) - len_gpath);
-		path_buff[ft_strlen(path_buff) - len_gpath] = 0;
-		ft_strncat(path_buff, "/", 2);
-		ft_strncat(path_buff, path, ft_strlen(path));
-	}
-	ft_printf("path find : %s \n", path_buff);
-
-	int		i = 0;
-	size_t		len = ft_strlen(path_buff);
-	while (path_buff[i])
-	{
-		if (ft_strncmp(&path_buff[i], "/../", 4))
+		if (!ft_strncmp(&path_tmp[i], "//", 2))
+			ft_strcpy(&path_tmp[i], &path_tmp[i + 1]);
+		else if (!ft_strncmp(&path_tmp[i], "/../", 4))
 		{
-			ft_strcpy(&path_buff[i], &path_buff[i + 3]);
+			ft_strcpy(&path_tmp[i], &path_tmp[i + 3]);
 			if (i != 0)
 			{
-				
-				// find last '/' and remove all betwen it
+				j = i - 1;
+				while (j > 0 && path_tmp[j] != '/')
+					j--;
+				ft_strcpy(&path_tmp[j + 1], &path_tmp[i]);
+				i = j;
 			}
 		}
-		else if (ft_strncmp(&path_buff[i], "/./", 3))
-			ft_strcpy(&path_buff[i], &path_buff[i + 2]);
+		else if (!ft_strncmp(&path_tmp[i], "/./", 3))
+			ft_strcpy(&path_tmp[i], &path_tmp[i + 2]);
 		else
 			i++;
 	}
+	ft_printf("path clean find : %s \n", path_tmp); // TODO delete debbug infos
+}
 
-	return (ft_strdup(path));
+char		*simplify_path(char *path)
+{
+	char		path_tmp[MAXPATHLEN * 2];
+	size_t		len_gpath;
 
+	len_gpath = ft_strlen(g_root_path);
 
+	ft_printf("path origin : %s %li\n", g_root_path, len_gpath); // TODO delete debbug infos
+	ft_printf("path give : %s %li\n", path, len_gpath);// TODO delete debbug infos
 
-	// path = get_real_path(path);
-	// path_tab = ft_strsplit_to_array(path, '/');
-	// free(path);
-	// if (path_tab == NULL)
-	// 	path = ft_strdup("/");
-	// else
-	// {
-	// 	path_tab = remove_path_returns(path_tab);
-	// 	path = ft_concat_and_delete_array(path_tab, "/");
-	// }
-	// path = add_root(path);
-	// return (path);
+	if (!path) // assume que path fait toujours moins que MAXPATHLEN
+		return (NULL);
+
+	if (path[0] == '/')
+		ft_strncpy(path_tmp, path, MAXPATHLEN);
+	else
+	{
+		getcwd(path_tmp, MAXPATHLEN);
+		if (ft_strncmp(path_tmp, g_root_path, len_gpath))
+			return (NULL);
+		ft_strcpy(path_tmp, &path_tmp[len_gpath]); // Buffer overflow ??
+		// path_tmp[ft_strlen(path_tmp) - len_gpath] = 0;
+		ft_strncat(path_tmp, "/", 2);
+		ft_strncat(path_tmp, path, ft_strlen(path));
+	}
+
+	ft_printf("path find : %s \n", path_tmp);// TODO delete debbug infos
+	if (path_tmp[0] != '/') // overprotection for the tests // TODO delete it
+	{
+		warn("path invalid");
+		ft_printf("path invalid : %s \n", path_tmp);// TODO delete debbug infos
+		return (NULL);
+	}
+
+	clean_tmp_path(path_tmp);
+	if (ft_strlen(path_tmp) + ft_strlen(g_root_path) > MAXPATHLEN)
+		return (NULL);
+	ft_strcpy(path, g_root_path);
+	ft_strncat(path, path_tmp, ft_strlen(path_tmp));
+
+	ft_printf("path final find : %s \n", path);// TODO delete debbug infos
+	// return le buffer envoyé
+	return (ft_strdup(path)); // TODO enlever le strdup quand free enlevés
 }
