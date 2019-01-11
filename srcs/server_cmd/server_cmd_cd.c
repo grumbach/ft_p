@@ -18,7 +18,7 @@ bool			cmd_cd(int sock, uint64_t body_size)
 	char			*path;
 
 	if (body_size > MAXPATHLEN)
-		return(cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
+		return(cmd_bad(sock, ERR_TAMPERING_DETECTED));
 
 	if (recv(sock, buf, body_size, 0) == 0)
 		return (false);

@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/10 18:04:50 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/11 19:52:12 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,10 @@ void			*read_file(const char *filename, size_t *file_size);
 void			free_file(void *file, size_t file_size);
 
 char			*get_filename_from(char *client_input);
+char			*simplify_path(char *path);
+size_t			root_path_len(void);
 
 void			fatal(const char *error) __attribute__((cold));
-char			*simplify_path(char *path);
 void			warn(const char *warning);
 
 #endif

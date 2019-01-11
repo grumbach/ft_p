@@ -21,7 +21,7 @@ bool			cmd_get(int sock, uint64_t body_size)
 	ssize_t			ret;
 
 	if (body_size > MAXPATHLEN)
-		return(cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
+		return(cmd_bad(sock, ERR_TAMPERING_DETECTED));
 
 	ret = recv(sock, buf, body_size, 0);
 	if (ret == 0)

@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/11 16:38:44 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/11 21:00:26 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,18 +64,18 @@ bool		launch_ls(int sock, const char *real_path, const char *path)
 
 bool			cmd_ls(int sock, uint64_t body_size)
 {
-	char			path[MAXPATHLEN + 1];
-	char			*real_path;
+	char			path[MAXPATHLEN];
+	char			real_path[MAXPATHLEN];
 
 	if (body_size > MAXPATHLEN)
-		return (cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
+		return (cmd_bad(sock, ERR_TAMPERING_DETECTED));
 	if (recv(sock, path, body_size, 0) == 0)
 		return (false);
 	if (*path == '\0')
 		ft_strcpy(path, ".");
 
-	real_path = simplify_path(path);
-	if (real_path == NULL)
+	ft_strncpy(real_path, path, MAXPATHLEN);
+	if (simplify_path(real_path) == NULL)
 		return (cmd_bad(sock, ERR_PERMISSION));
 
 	launch_ls(sock, real_path, path);

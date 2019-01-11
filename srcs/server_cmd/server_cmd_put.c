@@ -19,7 +19,7 @@ bool			cmd_put(int sock, uint64_t body_size)
 	ssize_t			ret;
 
 	if (body_size > MAXPATHLEN)
-		return(cmd_bad(sock, ERR_PATHLEN_OVERFLOW));
+		return(cmd_bad(sock, ERR_TAMPERING_DETECTED));
 
 	if ((ret = recv(sock, filename, body_size, 0) <= 0)
 	|| (ret = recv(sock, &request, sizeof(request), 0)) <= 0)

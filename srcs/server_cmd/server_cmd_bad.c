@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:44:48 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 05:53:49 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/11 20:39:03 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 # define STR_BAD_CMD_CODE			"bad command code"
 # define STR_CWD					"cwd failed"
-# define STR_PATHLEN_OVERFLOW		"MAXPATHLEN exeeded"
+# define STR_TAMPERING_DETECTED		"tampering detected"
 # define STR_CHDIR					"chdir failed"
 # define STR_PERMISSION				"permission denied"
 # define STR_GET_FILE				"failed to get file"
@@ -24,7 +24,7 @@ static const char	*g_server_errors[] =
 {
 	[ERR_BAD_CMD_CODE] = STR_BAD_CMD_CODE,
 	[ERR_CWD] = STR_CWD,
-	[ERR_PATHLEN_OVERFLOW] = STR_PATHLEN_OVERFLOW,
+	[ERR_TAMPERING_DETECTED] = STR_TAMPERING_DETECTED,
 	[ERR_CHDIR] = STR_CHDIR,
 	[ERR_PERMISSION] = STR_PERMISSION,
 	[ERR_GET_FILE] = STR_GET_FILE,
@@ -35,7 +35,7 @@ static const size_t	g_server_errors_len[] =
 {
 	[ERR_BAD_CMD_CODE] = sizeof(STR_BAD_CMD_CODE),
 	[ERR_CWD] = sizeof(STR_CWD),
-	[ERR_PATHLEN_OVERFLOW] = sizeof(STR_PATHLEN_OVERFLOW),
+	[ERR_TAMPERING_DETECTED] = sizeof(STR_TAMPERING_DETECTED),
 	[ERR_CHDIR] = sizeof(STR_CHDIR),
 	[ERR_PERMISSION] = sizeof(STR_PERMISSION),
 	[ERR_GET_FILE] = sizeof(STR_GET_FILE),
