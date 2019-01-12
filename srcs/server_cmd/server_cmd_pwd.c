@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 18:45:53 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:35:57 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 18:59:39 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,5 @@ bool			cmd_pwd(int sock, __unused uint64_t body_size)
 	if (*user_path == '\0')
 		ft_strcpy(user_path, "/");
 
-	send_answer(sock, ASW_OK, path_len);
-
-	send(sock, user_path, path_len, 0);
-
-	return (true);
+	return (send_answer(sock, ASW_OK, path_len, user_path));
 }

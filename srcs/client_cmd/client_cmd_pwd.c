@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 18:45:55 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:36:25 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 18:52:10 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ bool			cmd_pwd(int sock, __unused char *client_input)
 	t_ftp_header	answer;
 	ssize_t			ret;
 
-	send_request(sock, CMD_PWD, 0);
+	if (send_request(sock, CMD_PWD, 0, NULL) == false)
+		return (false);
 
 	if (receive_answer(sock, &answer) == false)
 		return (false);
-	if (answer.type != ASW_OK)
-		return (true);
-	if (answer.body_size >= MAXPATHLEN)
+
+	if (answer.type != ASW_OK || answer.body_size >= MAXPATHLEN)
 		return (true);
 
 	ret = recv(sock, path, answer.body_size, 0);
@@ -34,7 +34,7 @@ bool			cmd_pwd(int sock, __unused char *client_input)
 	if (ret == -1)
 	{
 		warn("failed to receive path from server");
-		return (true);
+		return (false);
 	}
 
 	path[ret] = '\0';

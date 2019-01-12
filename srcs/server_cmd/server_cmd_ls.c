@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:37:49 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 19:00:28 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 
 #define BUFSIZE 127
 
-static void		buffered_send(int sock, const char *data, size_t length)
+__attribute__((warn_unused_result))
+static bool		buffered_send(int sock, const char *data, size_t length)
 {
 	static char				buffer[BUFSIZE + 1];
 	static size_t			offset = 0;
@@ -24,22 +25,26 @@ static void		buffered_send(int sock, const char *data, size_t length)
 	// flush case
 	if (!data)
 	{
-		send_full_answer(sock, ASW_OK, buffer, offset);
+		if (send_answer(sock, ASW_OK, offset, buffer) == false)
+			return (false);
 		offset = 0;
-		return ;
+		return (true);
 	}
 	while (length >= BUFSIZE - offset)
 	{
 		ft_memcpy(&buffer[offset], data, BUFSIZE - offset);
-		send_full_answer(sock, ASW_MORE, buffer, BUFSIZE);
+		if (send_answer(sock, ASW_MORE, BUFSIZE, buffer) == false)
+			return (false);
 		length -= BUFSIZE - offset;
 		offset = 0;
 	}
 	ft_memcpy(&buffer[offset], data, length);
 	offset += length;
 	buffer[offset++] = '\n';
+	return (true);
 }
 
+__attribute__((warn_unused_result))
 static bool		launch_ls(int sock, const char *real_path, const char *path)
 {
 	struct stat		file_stat;
@@ -53,13 +58,13 @@ static bool		launch_ls(int sock, const char *real_path, const char *path)
 		if ((dir = opendir(real_path)) == NULL)
 			return (0);
 		while ((file = readdir(dir)))
-			buffered_send(sock, file->d_name, ft_strlen(file->d_name));
+			if (buffered_send(sock, file->d_name, ft_strlen(file->d_name)) == false)
+				return (false);
 		closedir(dir);
 	}
-	else
-		buffered_send(sock, path, ft_strlen(path));
-	buffered_send(sock, NULL, 0);
-	return (true);
+	else if (buffered_send(sock, path, ft_strlen(path)) == false)
+		return (false);
+	return (buffered_send(sock, NULL, 0));
 }
 
 __attribute__((warn_unused_result))
@@ -84,7 +89,5 @@ bool			cmd_ls(int sock, uint64_t body_size)
 	if (simplify_path(real_path) == NULL)
 		return (cmd_bad(sock, ERR_PERMISSION));
 
-	launch_ls(sock, real_path, path);
-
-	return (true);
+	return (launch_ls(sock, real_path, path));
 }

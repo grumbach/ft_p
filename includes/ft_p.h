@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/11 19:52:12 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 19:01:57 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,23 +71,39 @@ typedef struct	s_ftp_header
 ** -----------------------------------------------------------------------------
 */
 
-bool			parse_args(int ac, char **av, char **address, uint16_t *port);
+/*
+** socket and network io
+*/
 
 int				socket_init(char *address, int port, enum e_mode is_server);
 void			socket_cleanup(void);
 
-void			send_request(int sock, const int type, const size_t body_size);
-void			send_answer(int sock, const int type, const size_t body_size);
-void			send_full_answer(int sock, const int type, char *body, const ssize_t body_size);
+bool			send_request(int sock, const int type, \
+				const size_t body_size, const char * const body);
+bool			send_answer(int sock, const int type, \
+				const size_t body_size, const char * const body);
 bool			receive_answer(int sock, t_ftp_header *answer);
 bool			receive_file(int sock, const char *filename, size_t body_size);
+
+/*
+** file io
+*/
 
 void			*read_file(const char *filename, size_t *file_size);
 void			free_file(void *file, size_t file_size);
 
+/*
+** parsing, path management
+*/
+
+bool			parse_args(int ac, char **av, char **address, uint16_t *port);
 char			*get_filename_from(char *client_input);
 char			*simplify_path(char *path);
 size_t			root_path_len(void);
+
+/*
+** error announcement
+*/
 
 void			fatal(const char *error) __attribute__((cold));
 void			warn(const char *warning);

@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:44:48 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:36:20 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 19:01:11 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,5 @@ bool				cmd_bad(int sock, uint64_t body_size)
 {
 	const size_t	error_len = g_server_errors_len[body_size];
 
-	send_answer(sock, ASW_BAD, error_len);
-	send(sock, g_server_errors[body_size], error_len, 0);
-	return (true);
+	return (send_answer(sock, ASW_BAD, error_len, g_server_errors[body_size]));
 }

@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:47:09 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:36:59 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 17:53:57 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,15 +38,14 @@ static bool		receive_body(int sock, t_ftp_header answer, char *body)
 __attribute__((warn_unused_result))
 bool			cmd_ls(int sock, char *client_input)
 {
-	size_t			body_size;
+	char				body[MAXPATHLEN + 1];
+	size_t				body_size;
+	t_ftp_header		answer;
 
 	body_size = ft_strlen(client_input) + 1;
 
-	send_request(sock, CMD_LS, body_size);
-	send(sock, client_input, body_size, 0);
-
-	char				body[MAXPATHLEN + 1];
-	t_ftp_header		answer;
+	if (send_request(sock, CMD_LS, body_size, client_input) == false)
+		return (false);
 
 	answer.type = ASW_MORE;
 	while (answer.type == ASW_MORE)

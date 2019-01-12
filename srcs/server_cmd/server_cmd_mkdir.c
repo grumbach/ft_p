@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:43:01 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:36:06 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 19:00:42 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,5 @@ bool			cmd_mkdir(int sock, uint64_t body_size)
 	if (ret == -1)
 		return(cmd_bad(sock, ERR_CHDIR));
 
-	send_answer(sock, ASW_OK, 0);
-
-	return (true);
+	return (send_answer(sock, ASW_OK, 0, NULL));
 }

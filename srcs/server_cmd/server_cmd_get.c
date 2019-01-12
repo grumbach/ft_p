@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:12 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:36:13 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 18:54:45 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ bool			cmd_get(int sock, uint64_t body_size)
 		return(cmd_bad(sock, ERR_TAMPERING_DETECTED));
 
 	ret = recv(sock, buf, body_size, 0);
-	if (ret == 0)
+	if (ret <= 0)
 		return (false);
 	buf[ret] = '\0';
 
@@ -39,9 +39,13 @@ bool			cmd_get(int sock, uint64_t body_size)
 
 	if (file == NULL)
 		return (cmd_bad(sock, ERR_GET_FILE));
-	send_answer(sock, ASW_OK, file_size);
-	send(sock, file, file_size, 0);
-	free_file(file, file_size);
 
+	if (send_answer(sock, ASW_OK, file_size, file) == false)
+	{
+		free_file(file, file_size);
+		return (false);
+	}
+
+	free_file(file, file_size);
 	return (true);
 }

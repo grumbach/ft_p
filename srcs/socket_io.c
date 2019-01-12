@@ -6,30 +6,37 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:04:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:38:38 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 19:02:09 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_p.h"
 
-void		send_request(int sock, const int type, const size_t body_size)
+__attribute__((warn_unused_result))
+bool		send_request(int sock, const int type, \
+			const size_t body_size, const char * const body)
 {
 	t_ftp_header	request;
 
 	request.type = type;
 	request.body_size = body_size;
-	send(sock, &request, sizeof(request), 0);
+	if (send(sock, &request, sizeof(request), 0) == -1)
+		return (false);
+
+	if (body)
+	{
+		if (send(sock, body, body_size, 0) == -1)
+			return (false);
+	}
+
+	return (true);
 }
 
-void		send_answer(int sock, const int type, const size_t body_size)
+__attribute__((warn_unused_result))
+bool		send_answer(int sock, const int type, \
+			const size_t body_size, const char * const body)
 {
-	send_request(sock, type, body_size);
-}
-
-void		send_full_answer(int sock, const int type, char *body, const ssize_t body_size)
-{
-	send_answer(sock, type, body_size);
-	send(sock, body, body_size, 0);
+	return (send_request(sock, type, body_size, body));
 }
 
 __attribute__((warn_unused_result))
@@ -47,8 +54,8 @@ static bool	receive_error(int sock, size_t message_len)
 		if (ret == -1)
 		{
 			ft_printf("\n");
-			warn("failed to receive error string form server");
-			return (true);
+			warn("failed to receive error string");
+			return (false);
 		}
 
 		ft_printf("%.*s", ret, buf);
@@ -70,8 +77,8 @@ bool		receive_answer(int sock, t_ftp_header *answer)
 	{
 		answer->type = ASW_BAD;
 		answer->body_size = 0;
-		warn("failed to receive answer from server");//NB from server?
-		return (true);
+		warn("failed to receive answer");
+		return (false);
 	}
 
 	if (answer->type == ASW_BAD)
@@ -103,7 +110,7 @@ bool		receive_file(int sock, const char *filename, size_t body_size)
 		if (ret == -1)
 		{
 			close(fd);
-			warn("failed to receive file content form server");
+			warn("failed to receive file content");
 			return (true);
 		}
 		write(fd, buf, ret);

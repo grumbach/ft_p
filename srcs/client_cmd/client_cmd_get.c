@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:46:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:37:03 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 17:53:28 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ bool			cmd_get(int sock, char *client_input)
 		warn("invalid filename");
 		return (true);
 	}
-	send_request(sock, CMD_GET, body_size);
-	send(sock, client_input, body_size, 0);
+	if (send_request(sock, CMD_GET, body_size, client_input) == false)
+		return (false);
 
 	if (receive_answer(sock, &answer) == false)
 		return (false);
