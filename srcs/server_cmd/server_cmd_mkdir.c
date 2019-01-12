@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:43:01 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 15:39:30 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 16:36:06 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+__attribute__((warn_unused_result))
 bool			cmd_mkdir(int sock, uint64_t body_size)
 {
 	char			buf[MAXPATHLEN];

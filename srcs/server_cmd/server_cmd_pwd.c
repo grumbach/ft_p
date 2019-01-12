@@ -6,12 +6,13 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 18:45:53 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/11 20:47:37 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 16:35:57 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
+__attribute__((warn_unused_result))
 bool			cmd_pwd(int sock, __unused uint64_t body_size)
 {
 	char			path[MAXPATHLEN];

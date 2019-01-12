@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 15:44:38 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 16:37:49 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ static bool		launch_ls(int sock, const char *real_path, const char *path)
 	return (true);
 }
 
+__attribute__((warn_unused_result))
 bool			cmd_ls(int sock, uint64_t body_size)
 {
 	char			path[MAXPATHLEN];

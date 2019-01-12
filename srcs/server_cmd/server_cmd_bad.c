@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:44:48 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/11 20:39:03 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 16:36:20 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static const size_t	g_server_errors_len[] =
 **   a macro starting with ERR_...
 */
 
+__attribute__((warn_unused_result))
 bool				cmd_bad(int sock, uint64_t body_size)
 {
 	const size_t	error_len = g_server_errors_len[body_size];

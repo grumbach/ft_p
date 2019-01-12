@@ -6,13 +6,14 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:47:09 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/09 22:23:15 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 16:36:59 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-bool		receive_body(int sock, t_ftp_header answer, char *body)
+__attribute__((warn_unused_result))
+static bool		receive_body(int sock, t_ftp_header answer, char *body)
 {
 	int		ret;
 
@@ -34,6 +35,7 @@ bool		receive_body(int sock, t_ftp_header answer, char *body)
 	return (true);
 }
 
+__attribute__((warn_unused_result))
 bool			cmd_ls(int sock, char *client_input)
 {
 	size_t			body_size;

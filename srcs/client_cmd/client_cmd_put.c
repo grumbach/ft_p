@@ -6,12 +6,13 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/17 18:45:55 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 07:17:47 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 16:36:27 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
+__attribute__((warn_unused_result))
 bool			cmd_put(int sock, char *client_input)
 {
 	char		*filename;

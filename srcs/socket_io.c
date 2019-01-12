@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:04:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/10 18:01:24 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 16:38:38 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void		send_full_answer(int sock, const int type, char *body, const ssize_t body_
 	send(sock, body, body_size, 0);
 }
 
+__attribute__((warn_unused_result))
 static bool	receive_error(int sock, size_t message_len)
 {
 	char		buf[FTP_RECV_BUFFER];
@@ -57,7 +58,7 @@ static bool	receive_error(int sock, size_t message_len)
 	return (true);
 }
 
-// TODO this func is used by client only, move away
+__attribute__((warn_unused_result))
 bool		receive_answer(int sock, t_ftp_header *answer)
 {
 	ssize_t		ret;
@@ -78,6 +79,7 @@ bool		receive_answer(int sock, t_ftp_header *answer)
 	return (true);
 }
 
+__attribute__((warn_unused_result))
 bool		receive_file(int sock, const char *filename, size_t body_size)
 {
 	char		buf[FTP_RECV_BUFFER];

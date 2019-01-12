@@ -6,12 +6,13 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:12 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 15:42:24 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 16:36:13 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 
+__attribute__((warn_unused_result))
 bool			cmd_get(int sock, uint64_t body_size)
 {
 	char			buf[MAXPATHLEN];
