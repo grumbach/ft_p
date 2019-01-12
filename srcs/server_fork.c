@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/10 17:11:30 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 15:57:00 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void		no_return_child_code(int sock)
 
 	while (receive_command(sock, &request))
 	{
-		if (request.type >= CMD_QUIT)
+		if (request.type >= CMD_QUIT || request.type == CMD_BAD)
 		{
 			request.type = CMD_BAD;
 			request.body_size = ERR_BAD_CMD_CODE;

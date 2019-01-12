@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:12 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/10 18:15:47 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 15:42:24 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,12 +20,13 @@ bool			cmd_get(int sock, uint64_t body_size)
 	size_t			file_size;
 	ssize_t			ret;
 
-	if (body_size > MAXPATHLEN)
+	if (body_size >= MAXPATHLEN)
 		return(cmd_bad(sock, ERR_TAMPERING_DETECTED));
 
 	ret = recv(sock, buf, body_size, 0);
 	if (ret == 0)
 		return (false);
+	buf[ret] = '\0';
 
 	filename = simplify_path(buf);
 	if (filename == NULL)

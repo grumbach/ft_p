@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:08 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/10 18:27:50 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 15:45:30 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,15 @@ bool			cmd_cd(int sock, uint64_t body_size)
 {
 	char			buf[MAXPATHLEN];
 	char			*path;
+	size_t			ret;
 
-	if (body_size > MAXPATHLEN)
+	if (body_size >= MAXPATHLEN)
 		return(cmd_bad(sock, ERR_TAMPERING_DETECTED));
 
-	if (recv(sock, buf, body_size, 0) == 0)
+	ret = recv(sock, buf, body_size, 0);
+	if (ret <= 0)
 		return (false);
+	buf[ret] = '\0';
 
 	if (*buf == '\0')
 		ft_strcpy(buf, "/");

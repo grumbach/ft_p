@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/11 21:00:26 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 15:44:38 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 #define BUFSIZE 127
 
-void		buffered_send(int sock, const char *data, size_t length)
+static void		buffered_send(int sock, const char *data, size_t length)
 {
 	static char				buffer[BUFSIZE + 1];
 	static size_t			offset = 0;
@@ -40,7 +40,7 @@ void		buffered_send(int sock, const char *data, size_t length)
 	buffer[offset++] = '\n';
 }
 
-bool		launch_ls(int sock, const char *real_path, const char *path)
+static bool		launch_ls(int sock, const char *real_path, const char *path)
 {
 	struct stat		file_stat;
 	void			*dir;
@@ -66,11 +66,16 @@ bool			cmd_ls(int sock, uint64_t body_size)
 {
 	char			path[MAXPATHLEN];
 	char			real_path[MAXPATHLEN];
+	size_t			ret;
 
-	if (body_size > MAXPATHLEN)
+	if (body_size >= MAXPATHLEN)
 		return (cmd_bad(sock, ERR_TAMPERING_DETECTED));
-	if (recv(sock, path, body_size, 0) == 0)
+
+	ret = recv(sock, path, body_size, 0);
+	if (ret <= 0)
 		return (false);
+	path[ret] = '\0';
+
 	if (*path == '\0')
 		ft_strcpy(path, ".");
 
