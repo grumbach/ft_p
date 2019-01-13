@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:12:17 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 05:56:57 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 19:05:53 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "ft_p.h"
 
-int				lexer(const char * client_input, char **input_arg);
+int				lexer(const char *client_input, char **input_arg);
 
 /*
 ** Client commands

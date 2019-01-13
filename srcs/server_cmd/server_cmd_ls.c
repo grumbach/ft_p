@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 19:00:28 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 19:22:54 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,11 @@
 
 #define BUFSIZE 127
 
-__attribute__((warn_unused_result))
 static bool		buffered_send(int sock, const char *data, size_t length)
 {
 	static char				buffer[BUFSIZE + 1];
 	static size_t			offset = 0;
 
-	// flush case
 	if (!data)
 	{
 		if (send_answer(sock, ASW_OK, offset, buffer) == false)
@@ -44,7 +42,6 @@ static bool		buffered_send(int sock, const char *data, size_t length)
 	return (true);
 }
 
-__attribute__((warn_unused_result))
 static bool		launch_ls(int sock, const char *real_path, const char *path)
 {
 	struct stat		file_stat;
@@ -58,7 +55,8 @@ static bool		launch_ls(int sock, const char *real_path, const char *path)
 		if ((dir = opendir(real_path)) == NULL)
 			return (0);
 		while ((file = readdir(dir)))
-			if (buffered_send(sock, file->d_name, ft_strlen(file->d_name)) == false)
+			if (buffered_send(sock, file->d_name, ft_strlen(file->d_name)) \
+				== false)
 				return (false);
 		closedir(dir);
 	}
@@ -67,7 +65,6 @@ static bool		launch_ls(int sock, const char *real_path, const char *path)
 	return (buffered_send(sock, NULL, 0));
 }
 
-__attribute__((warn_unused_result))
 bool			cmd_ls(int sock, uint64_t body_size)
 {
 	char			path[MAXPATHLEN];
@@ -76,18 +73,14 @@ bool			cmd_ls(int sock, uint64_t body_size)
 
 	if (body_size >= MAXPATHLEN)
 		return (cmd_bad(sock, ERR_TAMPERING_DETECTED));
-
 	ret = recv(sock, path, body_size, 0);
 	if (ret <= 0)
 		return (false);
 	path[ret] = '\0';
-
 	if (*path == '\0')
 		ft_strcpy(path, ".");
-
 	ft_strncpy(real_path, path, MAXPATHLEN);
 	if (simplify_path(real_path) == NULL)
 		return (cmd_bad(sock, ERR_PERMISSION));
-
 	return (launch_ls(sock, real_path, path));
 }

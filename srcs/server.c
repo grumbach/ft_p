@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:06 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/13 17:26:01 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 19:25:22 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,9 @@
 ** exceptions
 */
 
-void			signal_handler(__unused int sig)
+void			signal_handler(int sig)
 {
+	(void)sig;
 	socket_cleanup();
 	ft_puts("\n"FTP_LOG"Exiting...");
 	exit(EXIT_SUCCESS);
@@ -40,10 +41,8 @@ static void		accept_loop(int sock)
 		socklen = sizeof(struct sockaddr_in);
 		client_sock = accept(sock, (struct sockaddr *)&client, \
 			(socklen_t*)&socklen);
-
 		if (client_sock == -1)
 			fatal("while attempting to accept connection");
-
 		pid = fork();
 		if (pid == -1)
 			fatal("while attempting to fork a new server");
@@ -59,11 +58,8 @@ int				main(int ac, char **av)
 
 	if (parse_args(ac, av, NULL, &port) == false)
 		return (EXIT_FAILURE);
-
 	set_root_path();
 	sock = socket_init(NULL, port, SERVER);
-
 	signal(SIGINT, &signal_handler);
-
 	accept_loop(sock);
 }

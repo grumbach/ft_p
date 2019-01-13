@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/13 17:33:03 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 19:06:37 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,21 @@ enum			e_mode
 
 enum			e_cmd
 {
-	CMD_BAD,    /* for any invalid commands */
-	CMD_LS,     /* list in the current server’s directory */
-	CMD_MKDIR,  /* make a directory */
-	CMD_CD,     /* change the current server’s directory */
-	CMD_GET,    /* download the file file from the server to the client */
-	CMD_PUT,    /* upload the file file from the client to the server */
-	CMD_PWD,    /* display the path of the current server’s directory */
-	CMD_QUIT    /* cuts the connection + exit the program (must be last) */
+	CMD_BAD,
+	CMD_LS,
+	CMD_MKDIR,
+	CMD_CD,
+	CMD_GET,
+	CMD_PUT,
+	CMD_PWD,
+	CMD_QUIT
 };
 
 enum			e_answer
 {
-	ASW_BAD,    /* for any invalid commands */
-	ASW_OK,     /* success answer */
-	ASW_MORE    /* if there is more data to read */
+	ASW_BAD,
+	ASW_OK,
+	ASW_MORE
 };
 
 /*
@@ -79,9 +79,9 @@ int				socket_init(char *address, int port, enum e_mode is_server);
 void			socket_cleanup(void);
 
 bool			send_request(int sock, const int type, \
-				const size_t body_size, const char * const body);
+				const size_t body_size, const char *const body);
 bool			send_answer(int sock, const int type, \
-				const size_t body_size, const char * const body);
+				const size_t body_size, const char *const body);
 bool			receive_answer(int sock, t_ftp_header *answer);
 bool			receive_file(int sock, const char *filename, size_t body_size);
 

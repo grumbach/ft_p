@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/10 18:26:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/13 17:31:57 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 19:21:57 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ static size_t		g_root_path_len;
 **   must be called at startup
 */
 
-__attribute__((warn_unused_result))
 bool			set_root_path(void)
 {
 	if (getcwd(g_root_path, MAXPATHLEN) == NULL)
@@ -56,7 +55,6 @@ static void		clean_tmp_path(char *path_tmp)
 	j = 0;
 	ft_strcpy(path, path_tmp);
 	while (path[i])
-	{
 		if (!ft_strncmp(&path[i], "/../", 4) || !ft_strcmp(&path[i], "/.."))
 		{
 			i += 3;
@@ -71,13 +69,11 @@ static void		clean_tmp_path(char *path_tmp)
 			i += 2;
 		else
 			path_tmp[j++] = path[i++];
-	}
 	if (j == 0)
 		path_tmp[j++] = '/';
 	path_tmp[j] = '\0';
 }
 
-__attribute__((nonnull))
 char			*simplify_path(char *path)
 {
 	char		path_tmp[MAXPATHLEN * 2];
@@ -93,7 +89,6 @@ char			*simplify_path(char *path)
 		ft_strncat(path_tmp, "/", 2);
 		ft_strcat(path_tmp, path);
 	}
-
 	clean_tmp_path(path_tmp);
 	if (ft_strlen(path_tmp) + g_root_path_len >= MAXPATHLEN)
 		return (NULL);

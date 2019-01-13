@@ -6,14 +6,15 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:47:24 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:36:23 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 19:26:30 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
-__attribute__((warn_unused_result))
-bool			cmd_quit(__unused int sock, __unused char *client_input)
+bool			cmd_quit(int sock, char *client_input)
 {
+	(void)sock;
+	(void)client_input;
 	return (false);
 }
