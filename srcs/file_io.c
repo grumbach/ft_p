@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 15:29:31 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/13 19:08:30 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 23:44:57 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@
 **
 ** free_file:
 ** - unmaps file from memory
-**
-** filename_invalid:
-** - checks if filename is empty or not printable
 */
 
 void		*read_file(const char *filename, size_t *file_size)
@@ -46,4 +43,33 @@ void		*read_file(const char *filename, size_t *file_size)
 void		free_file(void *file, size_t file_size)
 {
 	munmap(file, file_size);
+}
+
+bool		receive_file(int sock, const char *filename, size_t body_size)
+{
+	char		buf[FTP_RECV_BUFFER];
+	int			fd;
+	ssize_t		ret;
+
+	if ((fd = open(filename, O_CREAT | O_WRONLY, 0700)) < 0)
+	{
+		warn("failed to open file for writing");
+		return (true);
+	}
+	while (body_size > 0)
+	{
+		ret = recv(sock, buf, FTP_RECV_BUFFER, 0);
+		if (ret == -1)
+			warn("failed to receive file content");
+		if (ret <= 0)
+		{
+			close(fd);
+			return (false);
+		}
+		if (write(fd, buf, ret) == -1)
+			return (true);
+		body_size -= ret;
+	}
+	close(fd);
+	return (true);
 }

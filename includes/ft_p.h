@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/13 19:06:37 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 23:41:40 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 # define FT_P_H
 
 # define FTP_MAX_QUEUE			5
-# define FTP_RECV_BUFFER		1024
+# define FTP_RECV_BUFFER		0x1000
+# define FTP_SEND_BUFFER		0x100000
 
 # include "libft.h"
 # include <arpa/inet.h>
