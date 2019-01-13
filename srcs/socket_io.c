@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:04:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/13 19:21:05 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 20:21:27 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ bool		receive_file(int sock, const char *filename, size_t body_size)
 	int			fd;
 	ssize_t		ret;
 
-	if ((fd = open(filename, O_CREAT | O_WRONLY)) < 0)
+	if ((fd = open(filename, O_CREAT | O_WRONLY, 0700)) < 0)
 	{
 		warn("failed to open file for writing");
 		return (true);
