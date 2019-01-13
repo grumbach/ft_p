@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:04:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/13 20:21:27 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 23:39:30 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,11 @@ bool		receive_file(int sock, const char *filename, size_t body_size)
 			close(fd);
 			return (false);
 		}
-		write(fd, buf, ret);
+		if (write(fd, buf, ret) == -1)
+		{
+			warn("failed to write to file");
+			break ;
+		}
 		body_size -= ret;
 	}
 	close(fd);
