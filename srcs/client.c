@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:03 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 06:16:11 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 16:34:48 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,15 @@ void			client_shell(int sock)
 		cmd = lexer(client_input, &input_arg);
 		if (cmd == -1)
 			continue ;
-		execute_command[cmd](sock, input_arg);
+		if (!execute_command[cmd](sock, input_arg))
+		{
+			warn("server disconnected");
+			break;
+		}
 		if (cmd == CMD_QUIT)
 			break ;
 	}
-	ft_printf("\e[32mExiting...\n\e[0m");
+	ft_puts("\n" FTP_LOG "\e[32mExiting...\e[0m");
 	return ;
 }
 

@@ -6,12 +6,13 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:46:59 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 06:51:08 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 17:53:28 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "client.h"
 
+__attribute__((warn_unused_result))
 bool			cmd_get(int sock, char *client_input)
 {
 	t_ftp_header	answer;
@@ -26,13 +27,13 @@ bool			cmd_get(int sock, char *client_input)
 		warn("invalid filename");
 		return (true);
 	}
-	send_request(sock, CMD_GET, body_size);
-	send(sock, client_input, body_size, 0);
+	if (send_request(sock, CMD_GET, body_size, client_input) == false)
+		return (false);
 
-	if (recieve_answer(sock, &answer) == false)
+	if (receive_answer(sock, &answer) == false)
 		return (false);
 
 	if (answer.type == ASW_OK)
-		return (recieve_file(sock, filename, answer.body_size));
+		return (receive_file(sock, filename, answer.body_size));
 	return (true);
 }

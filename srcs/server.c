@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:06 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 06:12:30 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 17:26:01 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ static void		accept_loop(int sock)
 			no_return_child_code(client_sock);
 	}
 }
-
-bool		set_root_path(void);
 
 int				main(int ac, char **av)
 {

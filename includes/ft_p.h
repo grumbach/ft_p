@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 06:58:20 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 17:33:03 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,24 +71,39 @@ typedef struct	s_ftp_header
 ** -----------------------------------------------------------------------------
 */
 
-bool			parse_args(int ac, char **av, char **address, uint16_t *port);
+/*
+** socket and network io
+*/
 
 int				socket_init(char *address, int port, enum e_mode is_server);
 void			socket_cleanup(void);
 
-void			send_request(int sock, const int type, const size_t body_size);
-void			send_answer(int sock, const int type, const size_t body_size);
-bool			recieve_error(int sock, size_t message_len);
-bool			recieve_answer(int sock, t_ftp_header *answer);
-bool			recieve_file(int sock, const char *filename, size_t body_size);
+bool			send_request(int sock, const int type, \
+				const size_t body_size, const char * const body);
+bool			send_answer(int sock, const int type, \
+				const size_t body_size, const char * const body);
+bool			receive_answer(int sock, t_ftp_header *answer);
+bool			receive_file(int sock, const char *filename, size_t body_size);
+
+/*
+** file io
+*/
 
 void			*read_file(const char *filename, size_t *file_size);
 void			free_file(void *file, size_t file_size);
 
+/*
+** basic parsing
+*/
+
+bool			parse_args(int ac, char **av, char **address, uint16_t *port);
 char			*get_filename_from(char *client_input);
 
-void			fatal(const char *error);
-char			*simplify_path(char *path);
+/*
+** error announcement
+*/
+
+void			fatal(const char *error) __attribute__((cold));
 void			warn(const char *warning);
 
 #endif

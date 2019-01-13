@@ -6,27 +6,41 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:04:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 06:48:37 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/12 19:02:09 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_p.h"
 
-void		send_request(int sock, const int type, const size_t body_size)
+__attribute__((warn_unused_result))
+bool		send_request(int sock, const int type, \
+			const size_t body_size, const char * const body)
 {
 	t_ftp_header	request;
 
 	request.type = type;
 	request.body_size = body_size;
-	send(sock, &request, sizeof(request), 0);
+	if (send(sock, &request, sizeof(request), 0) == -1)
+		return (false);
+
+	if (body)
+	{
+		if (send(sock, body, body_size, 0) == -1)
+			return (false);
+	}
+
+	return (true);
 }
 
-void		send_answer(int sock, const int type, const size_t body_size)
+__attribute__((warn_unused_result))
+bool		send_answer(int sock, const int type, \
+			const size_t body_size, const char * const body)
 {
-	send_request(sock, type, body_size);
+	return (send_request(sock, type, body_size, body));
 }
 
-bool		recieve_error(int sock, size_t message_len)
+__attribute__((warn_unused_result))
+static bool	receive_error(int sock, size_t message_len)
 {
 	char		buf[FTP_RECV_BUFFER];
 	ssize_t		ret;
@@ -40,8 +54,8 @@ bool		recieve_error(int sock, size_t message_len)
 		if (ret == -1)
 		{
 			ft_printf("\n");
-			warn("failed to recieve error string form server");
-			return (true);
+			warn("failed to receive error string");
+			return (false);
 		}
 
 		ft_printf("%.*s", ret, buf);
@@ -51,7 +65,8 @@ bool		recieve_error(int sock, size_t message_len)
 	return (true);
 }
 
-bool		recieve_answer(int sock, t_ftp_header *answer)
+__attribute__((warn_unused_result))
+bool		receive_answer(int sock, t_ftp_header *answer)
 {
 	ssize_t		ret;
 
@@ -62,16 +77,17 @@ bool		recieve_answer(int sock, t_ftp_header *answer)
 	{
 		answer->type = ASW_BAD;
 		answer->body_size = 0;
-		warn("failed to recieve answer from server");//NB from server?
-		return (true);
+		warn("failed to receive answer");
+		return (false);
 	}
 
 	if (answer->type == ASW_BAD)
-		return (recieve_error(sock, answer->body_size));
+		return (receive_error(sock, answer->body_size));
 	return (true);
 }
 
-bool		recieve_file(int sock, const char *filename, size_t body_size)
+__attribute__((warn_unused_result))
+bool		receive_file(int sock, const char *filename, size_t body_size)
 {
 	char		buf[FTP_RECV_BUFFER];
 	int			fd;
@@ -94,7 +110,7 @@ bool		recieve_file(int sock, const char *filename, size_t body_size)
 		if (ret == -1)
 		{
 			close(fd);
-			warn("failed to recieve file content form server");
+			warn("failed to receive file content");
 			return (true);
 		}
 		write(fd, buf, ret);

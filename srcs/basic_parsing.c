@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   string_checking.c                                  :+:      :+:    :+:   */
+/*   basic_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/22 17:11:27 by agrumbac          #+#    #+#             */
-/*   Updated: 2018/12/17 06:58:10 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 17:29:58 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,4 +43,24 @@ char		*get_filename_from(char *client_input)
 	if (filename_invalid(filename))
 		return (NULL);
 	return (filename);
+}
+
+bool		parse_args(int ac, char **av, char **address, uint16_t *port)
+{
+	// client case
+	if (address && ac == 3)
+	{
+		*address = av[1];
+		*port = (uint16_t)ft_atoi(av[2]);
+		return (true);
+	}
+	// server case
+	else if (address == NULL && ac == 2)
+	{
+		*port = (uint16_t)ft_atoi(av[1]);
+		return (true);
+	}
+	// error case
+	ft_printf("usage : %s %s<port>\n", av[0], address ? "<address> " : "");
+	return (false);
 }
