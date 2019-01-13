@@ -6,7 +6,7 @@
 #    By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/04/10 17:19:11 by agrumbac          #+#    #+#              #
-#    Updated: 2019/01/13 17:30:57 by agrumbac         ###   ########.fr        #
+#    Updated: 2019/01/13 19:38:53 by agrumbac         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ CLIENT_NAME = client
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -fsanitize=address,undefined -g -MMD
+CFLAGS = -Wall -Wextra -Werror -MMD
 
 COMMON_SRC = socket.c errors.c socket_io.c file_io.c basic_parsing.c
 
