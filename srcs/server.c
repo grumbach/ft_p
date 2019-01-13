@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 20:01:06 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/13 17:26:01 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 22:57:26 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ static void		accept_loop(int sock)
 			fatal("while attempting to fork a new server");
 		if (pid == 0)
 			no_return_child_code(client_sock);
+		waitpid(-1, (int[1]){1}, WNOHANG);
 	}
 }
 

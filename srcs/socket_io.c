@@ -6,11 +6,32 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:04:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/13 22:19:09 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 23:16:28 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_p.h"
+
+__attribute__((warn_unused_result))
+static bool	send_body(int sock, size_t body_size, const char * const body)
+{
+	ssize_t	ret;
+	size_t	offset;
+
+	offset = 0;
+	while (body_size > 0)
+	{
+		ret = body_size;
+		if (body_size > FTP_SEND_BUFFER)
+			ret = FTP_SEND_BUFFER;
+		ret = send(sock, body + offset, ret, 0);
+		if (ret == -1)
+			return (false);
+		body_size -= ret;
+		offset += ret;
+	}
+	return (true);
+}
 
 __attribute__((warn_unused_result))
 bool		send_request(int sock, const int type, \
@@ -21,12 +42,17 @@ bool		send_request(int sock, const int type, \
 	request.type = type;
 	request.body_size = body_size;
 	if (send(sock, &request, sizeof(request), 0) == -1)
+	{
+		warn("send failed while sending request");
 		return (false);
-
+	}
 	if (body)
 	{
-		if (send(sock, body, body_size, 0) == -1)
+		if (send_body(sock, body_size, body) == false)
+		{
+			warn("send failed while sending body");
 			return (false);
+		}
 	}
 
 	return (true);
@@ -107,9 +133,13 @@ bool		receive_file(int sock, const char *filename, size_t body_size)
 		if (ret <= 0)
 		{
 			close(fd);
-			return (true);
+			return (false);
 		}
-		write(fd, buf, ret);
+		if (write(fd, buf, ret) == -1)
+		{
+			warn("failed to write to file");
+			break ;
+		}
 		body_size -= ret;
 	}
 	close(fd);
