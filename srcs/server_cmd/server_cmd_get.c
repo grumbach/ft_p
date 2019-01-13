@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 19:45:12 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 18:54:45 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 17:18:57 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ bool			cmd_get(int sock, uint64_t body_size)
 	if (filename == NULL)
 		return (cmd_bad(sock, ERR_INVALID_FILENAME));
 
-	//send file
+	// send file
 
 	file = read_file(filename, &file_size);
 

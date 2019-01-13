@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   string_checking.c                                  :+:      :+:    :+:   */
+/*   basic_parsing.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/22 17:11:27 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 16:39:17 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 17:29:58 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ bool		parse_args(int ac, char **av, char **address, uint16_t *port)
 		*port = (uint16_t)ft_atoi(av[2]);
 		return (true);
 	}
-	//server case
+	// server case
 	else if (address == NULL && ac == 2)
 	{
 		*port = (uint16_t)ft_atoi(av[1]);

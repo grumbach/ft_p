@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:10:58 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/10 18:02:54 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 17:28:51 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,14 @@
 # include "ft_p.h"
 
 void			no_return_child_code(int client_sock) __attribute__((noreturn));
+
+/*
+** Server side path checking
+*/
+
+bool			set_root_path(void);
+size_t			root_path_len(void);
+char			*simplify_path(char *path);
 
 /*
 ** Server error codes

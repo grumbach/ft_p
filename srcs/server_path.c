@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   simplify_path.c                                    :+:      :+:    :+:   */
+/*   server_path.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/10 18:26:19 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/11 21:27:19 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 17:31:57 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ size_t			root_path_len(void)
 /*
 ** simplify_path:
 **   simplifies path given, returns path
-**   path must be MAXPATHLEN
+**   path is allocated by caller and must be at least MAXPATHLEN
 */
 
 static void		clean_tmp_path(char *path_tmp)
@@ -82,7 +82,6 @@ char			*simplify_path(char *path)
 {
 	char		path_tmp[MAXPATHLEN * 2];
 
-	path[MAXPATHLEN - 1] = '\0'; // TODO remove tmp security after issue #12 fix
 	if (path[0] == '/')
 		ft_strncpy(path_tmp, path, MAXPATHLEN);
 	else

@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/18 18:08:35 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 15:57:00 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 17:15:31 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,6 @@ void		no_return_child_code(int sock)
 	ft_printf(FTP_LOG "\t\t{%d}\tclosing socket\n", sock);
 
 	if (close(sock) == -1)
-		warn("Failed closing socket");
+		warn("failed closing socket");
 	exit(EXIT_SUCCESS);
 }

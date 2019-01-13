@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/31 17:03:32 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 19:01:57 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 17:33:03 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,13 +93,11 @@ void			*read_file(const char *filename, size_t *file_size);
 void			free_file(void *file, size_t file_size);
 
 /*
-** parsing, path management
+** basic parsing
 */
 
 bool			parse_args(int ac, char **av, char **address, uint16_t *port);
 char			*get_filename_from(char *client_input);
-char			*simplify_path(char *path);
-size_t			root_path_len(void);
 
 /*
 ** error announcement
