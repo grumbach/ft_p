@@ -6,7 +6,7 @@
 /*   By: agrumbac <agrumbac@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/20 16:04:44 by agrumbac          #+#    #+#             */
-/*   Updated: 2019/01/12 19:02:09 by agrumbac         ###   ########.fr       */
+/*   Updated: 2019/01/13 22:19:09 by agrumbac         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ bool		receive_file(int sock, const char *filename, size_t body_size)
 	int			fd;
 	ssize_t		ret;
 
-	fd = open(filename, O_CREAT | O_WRONLY);
+	fd = open(filename, O_CREAT | O_WRONLY, 0700);
 	if (fd < 0)
 	{
 		warn("failed to open file for writing");
@@ -102,15 +102,11 @@ bool		receive_file(int sock, const char *filename, size_t body_size)
 	while (body_size > 0)
 	{
 		ret = recv(sock, buf, FTP_RECV_BUFFER, 0);
-		if (ret == 0)
-		{
-			close(fd);
-			return (false);
-		}
 		if (ret == -1)
+			warn("failed to receive file content");
+		if (ret <= 0)
 		{
 			close(fd);
-			warn("failed to receive file content");
 			return (true);
 		}
 		write(fd, buf, ret);
