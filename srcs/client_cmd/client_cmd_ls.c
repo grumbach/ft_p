@@ -29,7 +29,7 @@ static bool		receive_body(int sock, t_ftp_header answer, char *body)
 	if (ret == -1)
 	{
 		warn("failed to receive answer body from server");
-		return (true);
+		return (false);
 	}
 
 	return (true);
