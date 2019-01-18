@@ -21,9 +21,6 @@
 **
 ** free_file:
 ** - unmaps file from memory
-**
-** filename_invalid:
-** - checks if filename is empty or not printable
 */
 
 void		*read_file(const char *filename, size_t *file_size)
